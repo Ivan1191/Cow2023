@@ -233,7 +233,7 @@ var k = schedule.scheduleJob(rule_min, function(){
  
     video.pic_rtsp_1()
     video.pic_rtsp_2()
-
+ 
     //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     // var v_name = ""
     // name_buf = 0

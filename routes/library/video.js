@@ -58,7 +58,7 @@ function Pic_rtsp_1(){ //錄無聲影片
         //Record_rtsp_1();
     });
 }
-
+ 
 function Pic_rtsp_2(){ //錄無聲影片
     var concateExec = require('child_process').exec;
     var child = concateExec('ffmpeg -i ' + rtsp_2 + ' -y -q:v 2 -f mjpeg -frames:v 1 -s 960x540 ' + picpath_2 + get_time() + '.jpg', function (error, stdout, stderr) {
