@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title><%= title %></title>
+    <script src="/build/live.bundle.js"></script>
+    <script src="https://jsmpeg.com/jsmpeg.min.js"></script>
+</head>
+
+<body>
+    <% include ./layout/header.html %>
+    <canvas  width="200" height="70"></canvas>
+    <main role="main" class="container-fluid">
+        <div>
+            <div style="display:flex; width: 100%; justify-content:center;">
+                <select class="selectpicker" style="margin-right: 0.5rem">
+                    <option value="0" selected>----請選擇----</option>
+                    <option value="21">192.168.11.21</option>
+                    <option value="22">192.168.11.22</option>
+                </select>
+            </div>
+
+            <div class="show">
+                <div id="show01" >
+                <canvas id="video-canvas1"></canvas>
+                <script type="text/javascript">
+                    var url = 'ws:///cow2020.ddns.net:3333';
+                    var canvas = document.getElementById('video-canvas1');
+                    var player = new JSMpeg.Player(url,{
+                                                        canvas: canvas, 
+                                                        audio: true
+                                                    });
+                </script>
+                </div>
+
+                <div id="show02" >
+                <canvas id="video-canvas2"></canvas>
+                <script type="text/javascript">
+                    var url = 'ws://cow2020.ddns.net:4444';
+                    var canvas = document.getElementById('video-canvas2');
+                    var player = new JSMpeg.Player(url,{
+                                                        canvas: canvas, 
+                                                        audio: true
+                                                    });
+                </script>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

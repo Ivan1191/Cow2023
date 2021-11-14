@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+    <title><%= title %></title>
+    <script src="/build/role_manage.bundle.js"></script>
+</head>
+
+<body>
+<% include ../layout/header.html %>
+<main class="container-fluid" role="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <h3><strong>角色權限管理</strong></h3>
+                <a class="btn btn-primary" id='createModal'>
+                    <i aria-hidden="true" class="fa fa-plus fa-lg mr-2"></i>新增角色
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" id="role_list" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>名稱</th>
+                        <th>Slug</th>
+                        <th>權限</th>
+                        <th>功能</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- CreateRoleModal Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="CreateRolesModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">
+                    <font face="微軟正黑體" size="6"><strong>新增角色</strong></font>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="role">角色名稱</label>
+                        <input class="form-control" id="name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Slug</label>
+                        <input class="form-control" id="rolerole" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="allows">擁有權限</label>
+                        <div class="form-group" id='optList'>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">關閉</button>
+                <button class="btn btn-primary" id="create" type="button">創建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EditModal Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="EditRoleModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">
+                    <font face="微軟正黑體" size="6"><strong>編輯角色</strong></font>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group" style='display: none;'>
+                        <label for="_id">_id</label>
+                        <input class="form-control" id="edit_id" readonly type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">角色名稱</label>
+                        <input class="form-control" id="editName" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Slug</label>
+                        <input class="form-control" id="editRoleRole" readonly type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="allows">擁有權限</label>
+                        <div class="form-group" id='editOptList'>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">關閉</button>
+                <button class="btn btn-primary" id="edit" type="button">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

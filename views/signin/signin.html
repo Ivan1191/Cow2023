@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <!-- <link rel="icon" href="/favicon.ico">
+        <link rel="icon" href="/favicon.ico"> -->
+    <link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
+    <title><%= title %></title>
+    <script src="/build/signin.bundle.js"></script>
+</head>
+
+<body>
+<div class="container" id="container">
+    <form class="form-signin" id="form-signin">
+        <h2 class="form-signin-heading">
+            <div class="row justify-content-md-center">
+                <!-- <a href="/">
+                    可視化操作系統介面
+                </a> -->
+                <img height="350" sizes="any" src="/favicon.svg" type="image/svg+xml" width="350">
+                <br>
+                <div class="title" style="font-size: 1.5rem; text-align: center;">母牛分娩之環控設施自動感知及難產聲音追蹤監控系統</div>
+            </div>
+        </h2>
+        <br/>
+        <label class="sr-only" for="inputUsername">帳號</label>
+        <input autofocus class="form-control" id="inputUsername" placeholder="帳號" required type="text">
+        <label class="sr-only" for="inputPassword">密碼</label>
+        <input class="form-control" id="inputPassword" placeholder="密碼" required type="password">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
+        <% if(locals.errorMessage){ %>
+            <input type="text" id="error" class="form-control" name="error" value="<%= errorMessage %>" style="display: none;" readonly>
+        <% } %>
+
+    </form>
+
+</div> <!-- /container -->
+
+<script>
+    window.history.pushState("", "", '/signin');
+</script>
+
+</body>
+
+</html>

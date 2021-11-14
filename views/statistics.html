@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+
+    <script src="/dist/js/chart.min.js"></script>
+    <link href="/dist/css/chart.css" rel="stylesheet"/>
+    <script src="/build/chart.bundle.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+</head>
+
+<body>
+<% include ./layout/header.html %>
+<div align="center" id="datediv">
+    <label class="control-label">開始日期</label>
+    <input id="startmonth" type="date" value="<%= moment().startOf('month').format('YYYY-MM-DD') %>">
+    <label class="control-label">結束日期</label>
+    <input id="endmonth" type="date" value="<%= moment().endOf('month').format('YYYY-MM-DD') %>">
+    <div>
+        <form id="dateroute" name="dateroute">
+            <label class="control-label">週期選擇</label>
+            <label><input name="dateselect" type="radio" value="year">年</label>
+            <label><input name="dateselect" type="radio" value="month">月</label>
+            <label><input name="dateselect" type="radio" value="week">週</label>
+            <label><input name="dateselect" type="radio" value="day">日</label>
+            <input class="btn btn-primary" id="checkdate" type="button" value="確認">
+            <input class="btn btn" onclick="window.location.reload()" type="button" value="清空資料">
+        </form>
+    </div>
+</div>
+</div>
+
+<div class="container" id="graph-container" style="position: relative; height:100vh; width:100vw">
+    <canvas id="myChart"></canvas>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+    <title><%= title %></title>
+    <script src="/build/backstage.bundle.js"></script>
+</head>
+
+<body>
+<% include ./layout/header.html %>
+
+<main class="container-fluid" role="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <h3><strong>後台管理</strong></h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-row">
+                <div class="col-md-2">
+                    <!-- Default checked -->
+                    <div class="form-group">
+                        <div class="form-group w-100">
+                            <label for="capacity">暫存容量(MB)</label>
+                            <input type="text" class="form-control" id="capacity" value="<%= capacity %>" readonly required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <br>
+                    <a id="clearCapacity" class="btn btn-sm btn-danger" style="margin-top: 8px; font-size: 16px; height:38px;" data-toggle="modal" data-target="#capacityClearConfirmModal">
+                        <i aria-hidden="true" class="fa fa-trash fa-lg mr-2"></i>清除暫存
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="alert alert-danger" id="alert-box" role="alert" style="display:none;">
+        <span aria-hidden="true" class="glyphicon glyphicon-exclamation-sign"></span>
+        <span class="sr-only">Error:</span>
+        Please check your information again.
+    </div>
+</main>
+
+<div class="modal fade" id="capacityClearConfirmModal" tabindex="-1" role="dialog" aria-labelledby="capacityClearConfirmModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="capacityClearConfirmModalLabel">確認清除暫存</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" >
+          <div style="text-align:center; color: red;">此動作可能造成作業中的音訊檔案遺失。</div>
+          <div style="text-align:center; color: grey;">(建議在清除前通知作業人員）</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+          
+          <form action="/backstage/clear" method="POST">
+            <button type="submit" class="btn btn-primary">確定</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

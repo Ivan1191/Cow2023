@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "name": "cow2020",
+      "script": "./bin/www",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

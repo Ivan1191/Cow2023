@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title><%= title %></title>
+    <script src="/build/temperature.bundle.js"></script>
+</head>
+
+<body>
+    <% include ./layout/header.html %>
+    <main role="main" class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div style="display:flex; width: 100%; justify-content:center;">
+                    <select class="selectpicker" style="margin-right: 0.5rem">
+                        <option value="line">折線圖</option>
+                        <option value="table">表格</option>
+                    </select>
+                    <select class="selectpicker" style="margin-left: 0.5rem">
+                        <option value="1">一天</option>
+                        <option value="3">三天</option>
+                        <option value="5">五天</option>
+                        <option value="7">七天</option>
+                    </select>
+                </div>
+                <div id="line" class="row">
+                    <div id="graph-containerA" class="container col-md-6">
+                        <div>
+                            <h3 style="width: 100%; text-align: center;"><strong>分娩舍-溫溼度感測1</strong></h3>
+                        </div>
+                        <canvas id="lineChartA"></canvas>
+                    </div>
+                    <div id="graph-containerB" class="container col-md-6">
+                        <div>
+                            <h3 style="width: 100%; text-align: center;"><strong>分娩舍-溫溼度感測2</strong></h3>
+                        </div>
+                        <canvas id="lineChartB"></canvas>
+                    </div>
+                    <div id="graph-containerC" class="container col-md-6">
+                        <div>
+                            <h3 style="width: 100%; text-align: center;"><strong>分娩舍-溫溼度感測3</strong></h3>
+                        </div>
+                        <canvas id="lineChartC"></canvas>
+                    </div>
+                    <div id="graph-containerD" class="container col-md-6">
+                        <div>
+                            <h3 style="width: 100%; text-align: center;"><strong>分娩舍-溫溼度感測4</strong></h3>
+                        </div>
+                        <canvas id="lineChartD"></canvas>
+                    </div>
+                </div>
+                <div id="table" class="row">
+                    <div class="table-responsive col-md-6">
+                        <table id="tableA" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <div>
+                                    <h3><strong>分娩舍 - 溫溼度感測1</strong></h3>
+                                </div>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>溫度</th>
+                                    <th>濕度</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-responsive col-md-6">
+                        <table id="tableB" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <div>
+                                    <h3><strong>分娩舍 - 溫溼度感測2</strong></h3>
+                                </div>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>溫度</th>
+                                    <th>濕度</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-responsive col-md-6">
+                        <table id="tableC" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <div>
+                                    <h3><strong>分娩舍 - 溫溼度感測3</strong></h3>
+                                </div>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>溫度</th>
+                                    <th>濕度</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-responsive col-md-6">
+                        <table id="tableD" class="table table-striped table-bordered" style="width: 100%">
+                            <thead>
+                                <div>
+                                    <h3><strong>次要麥克風 - 溫溼度感測4</strong></h3>
+                                </div>
+                                <tr>
+                                    <th>時間</th>
+                                    <th>溫度</th>
+                                    <th>濕度</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<form class="form-signin" id="form-chooseRole">
+    <h2 class="form-signin-heading">
+        <div class="row justify-content-md-center">
+            <!-- <a href="/">
+                可視化操作系統介面
+            </a> -->
+            <img height="350" sizes="any" src="/favicon.svg" type="image/svg+xml" width="350">
+            <br>
+            <div style="font-size: 1.5rem; text-align: center;">母牛分娩之環控設施自動感知及難產聲音追蹤監控系統</div>
+        </div>
+    </h2>
+    <br/>
+    <div class="form-group">
+        <div style="font-size: 26px; white-space: nowrap; text-align: center;">請選擇角色</div>
+        <select class="form-control" id="uf_role" name="role">
+            <% roles.forEach(function(val) { %>
+            <% if (user.roles.includes(val.role)) { %>
+            <option selected value="<%= val.role %>"><%= val.name %></option>
+            <% } %>
+            <% })%>
+        </select>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">選擇</button>
+</form>

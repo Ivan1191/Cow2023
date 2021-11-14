@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+
+    <title><%= title %></title>
+
+    <link href="/css/audioEditor.css" rel="stylesheet">
+    <script src="/build/audio_editor.bundle.js"></script>
+    <!-- <script src="../../routes/api.js"></script> -->
+</head>
+
+<body>
+    <% include ../layout/header.html %>
+
+
+    <!-- 音軌/播放器 -->
+    <main class="container-xl" role="main" class="row">
+        <div style="display: flex; justify-content: center; align-items: center;" class="col-md-12 row">
+            <div class="col-md-1">
+                <i id="leftArrow" class="arrow left"
+                style="border: solid black; border-width: 0 0.3rem 0.3rem 0; display: inline-block; padding: 0.3rem; transform: rotate(135deg); -webkit-transform: rotate(135deg);"></i>
+            </div>
+
+            <div id="waveform-container" class="col-md-10">
+                <div id="zoomview-container"></div>
+                <div id="overview-container"></div>
+            </div>
+            <div class="col-md-1">
+                <i id="rightArrow" class="arrow right"
+                    style="border: solid black; border-width: 0 0.3rem 0.3rem 0; display: inline-block; padding: 0.3rem; transform: rotate(-45deg); -webkit-transform: rotate(-45deg);"></i>
+            </div>
+        </div>
+        <div id="demo-controls" class="row">
+            <audio controls="controls" id="audio" class="col-md-4" style="min-width: 20rem; margin: 0 0 1rem 0;">
+                <source id="audioSource" src="" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <div id="controls" class="col-md-12">
+                <button data-action="zoom-in">縮小</button>
+                <button data-action="zoom-out">放大</button>
+                <button data-action="add-startEnd-point">設置開始/結束時間</button>
+                <button data-action="add-tag-point">標記時間</button>
+                <button id="cutAudio">裁切</button>
+                <button data-action="remove-tag-point">刪除標記時間</button>
+
+                <button class="hide" data-action="print">print</button>
+                <form id="filterType">
+                    <select id="filter">
+                        　
+                        <option value="filter1">filter1</option>
+                        　
+                        <option value="filter2">filter2</option>
+                    </select>
+                    <input id="filter_send" type="button" value="濾波">
+                </form>
+            </div>
+        </div>
+
+        <div class="log">
+            <div class="hide" id="points">
+                <h2>Points</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>time</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <% if (active == '/pro') { %>
+                <form action="/audio/updateEventB" class="form-horizontal" method="POST">
+                    <%} else { %>
+                    <form id="eventBCreateForm" action="/audio/createEventB" class="form-horizontal" method="POST">
+                        <% } %>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <% if (active == '/audio') { %>
+                                    <h3><strong>標記並新增分娩事件紀錄</strong></h3>
+                                    <div class="row">
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">檔案名稱：<%= fileName.split('/')[fileName.split('/').length-1] %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">麥克風編號：<%= microId %></p>
+                                        </div>
+
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌開始時間：<%=
+                                                zeroDate.getFullYear() + "-" +
+                                                (parseInt(zeroDate.getMonth()+1)<10 ? "0" + parseInt(zeroDate.getMonth()+1) : parseInt(zeroDate.getMonth()+1)) + "-" +
+                                                (zeroDate.getDate()<10? "0"+zeroDate.getDate() : zeroDate.getDate()) + " " +
+                                                (zeroDate.getHours()<10? "0"+zeroDate.getHours() : zeroDate.getHours()) + ":" +
+                                                (zeroDate.getMinutes()<10? "0"+zeroDate.getMinutes() : zeroDate.getMinutes()) + ":" +
+                                                (zeroDate.getSeconds()<10? "0"+zeroDate.getSeconds() : zeroDate.getSeconds())
+                                                %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌結束時間：<%=
+                                                tenDate.getFullYear() + "-" +
+                                                (parseInt(tenDate.getMonth()+1)<10 ? "0" + parseInt(tenDate.getMonth()+1) : parseInt(tenDate.getMonth()+1)) + "-" +
+                                                (tenDate.getDate()<10? "0"+tenDate.getDate() : tenDate.getDate()) + " " +
+                                                (tenDate.getHours()<10? "0"+tenDate.getHours() : tenDate.getHours()) + ":" +
+                                                (tenDate.getMinutes()<10? "0"+tenDate.getMinutes() : tenDate.getMinutes()) + ":" +
+                                                (tenDate.getSeconds()<10? "0"+tenDate.getSeconds() : tenDate.getSeconds())
+                                                %></p>
+                                        </div>
+                                    </div>
+                                    <% } else if (active == '/pro') { %>
+                                    <h3><strong>聲紋特徵分析系統-分娩資料庫操作</strong></h3>
+                                    <div class="row">
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">
+                                            檔案名稱：<%= fileName.split('/')[fileName.split('/').length-1] %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">麥克風編號：<%= microId %></p>
+                                        </div>
+
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌開始時間：<%=
+                                                zeroDate.getFullYear() + "-" +
+                                                (parseInt(zeroDate.getMonth()+1)<10 ? "0" + parseInt(zeroDate.getMonth()+1) : parseInt(zeroDate.getMonth()+1)) + "-" +
+                                                (zeroDate.getDate()<10? "0"+zeroDate.getDate() : zeroDate.getDate()) + " " +
+                                                (zeroDate.getHours()<10? "0"+zeroDate.getHours() : zeroDate.getHours()) + ":" +
+                                                (zeroDate.getMinutes()<10? "0"+zeroDate.getMinutes() : zeroDate.getMinutes()) + ":" +
+                                                (zeroDate.getSeconds()<10? "0"+zeroDate.getSeconds() : zeroDate.getSeconds())
+                                                %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌結束時間：<%=
+                                                tenDate.getFullYear() + "-" +
+                                                (parseInt(tenDate.getMonth()+1)<10 ? "0" + parseInt(tenDate.getMonth()+1) : parseInt(tenDate.getMonth()+1)) + "-" +
+                                                (tenDate.getDate()<10? "0"+tenDate.getDate() : tenDate.getDate()) + " " +
+                                                (tenDate.getHours()<10? "0"+tenDate.getHours() : tenDate.getHours()) + ":" +
+                                                (tenDate.getMinutes()<10? "0"+tenDate.getMinutes() : tenDate.getMinutes()) + ":" +
+                                                (tenDate.getSeconds()<10? "0"+tenDate.getSeconds() : tenDate.getSeconds())
+                                                %></p>
+                                        </div>
+                                    </div>
+                                    <% } else if(active == '/farm') {%>
+                                    <h3><strong>標記並新增分娩事件紀錄</strong></h3>
+                                    <div class="row">
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">檔案名稱：<%= fileName.split('/')[fileName.split('/').length-1] %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">麥克風編號：<%= microId %></p>
+                                        </div>
+
+                                        <div class="col-md-6 row">
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌開始時間：<%=
+                                                zeroDate.getFullYear() + "-" +
+                                                (parseInt(zeroDate.getMonth()+1)<10 ? "0" + parseInt(zeroDate.getMonth()+1) : parseInt(zeroDate.getMonth()+1)) + "-" +
+                                                (zeroDate.getDate()<10? "0"+zeroDate.getDate() : zeroDate.getDate()) + " " +
+                                                (new Date(zeroDate.getTime()+8*60*60*1000).getHours()<10? "0"+new Date(zeroDate.getTime()+8*60*60*1000).getHours() : new Date(zeroDate.getTime()+8*60*60*1000).getHours()) + ":" +
+                                                (zeroDate.getMinutes()<10? "0"+zeroDate.getMinutes() : zeroDate.getMinutes()) + ":" +
+                                                (zeroDate.getSeconds()<10? "0"+zeroDate.getSeconds() : zeroDate.getSeconds())
+                                                %></p>
+                                            <p class="col-md-12" style="font-size: 1.05rem;">音軌結束時間：<%=
+                                                tenDate.getFullYear() + "-" +
+                                                (parseInt(tenDate.getMonth()+1)<10 ? "0" + parseInt(tenDate.getMonth()+1) : parseInt(tenDate.getMonth()+1)) + "-" +
+                                                (tenDate.getDate()<10? "0"+tenDate.getDate() : tenDate.getDate()) + " " +
+                                                (tenDate.getHours()<10? "0"+tenDate.getHours() : tenDate.getHours()) + ":" +
+                                                (tenDate.getMinutes()<10? "0"+tenDate.getMinutes() : tenDate.getMinutes()) + ":" +
+                                                (tenDate.getSeconds()<10? "0"+tenDate.getSeconds() : tenDate.getSeconds())
+                                                %></p>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    <% if (active == '/pro' ) {%>
+                                    <div style="display:none">
+                                    <!-- <div> -->
+                                        <!-- edit -->
+                                        <input type="text" name="loginID" id="loginID" value="<%= loginID %>">
+                                        <input type="text" name="id" id="id" value="<%= event.id %>">
+                                        <input type="text" name="initTagPointTime" id="initTagPointTime"
+                                            value="<%= event.tagPointTime %>">
+                                        <input type="text" name="initFilePath" id="initFilePath"
+                                            value="<%= fileName %>">
+                                        <input type="text" name="tagPointTime" id="tagPointTime"
+                                            value="<%= event.tagPointTime %>">
+                                        <input type="text" name="filePath" id="filePath" value="<%= fileName %>">
+                                        <input type="text" name="startPointTime" id="startPointTime"
+                                            value="<%= event.startPointTime %>">
+                                        <input type="text" name="endPointTime" id="endPointTime"
+                                            value="<%= event.endPointTime %>">
+                                        <input type="text" name="tagDateTmp" id="tagDateTmp"
+                                            value="<%= event.tagDate %>">
+                                        <!-- 用以重設之暫存 -->
+                                        <input type="text" id="tmptagDate" name="tmptagDate" class="form-control"
+                                            value="<%= event.tagDate %>" readonly>
+                                        <input type="text" id="tmpcowLabels" name="tmpcowLabels" class="form-control"
+                                            value="<%= event.cowLabels %>" readonly>
+                                        <input type="text" id="tmpcowNumbers" name="tmpcowNumbers" class="form-control"
+                                            value="<%= event.cowNumbers %>" readonly>
+                                        <input type="text" id="tmphard" name="tmphard" class="form-control"
+                                            value="<%= event.hard %>" readonly>
+                                        <input type="text" id="tmpdailyRecord" name="tmpdailyRecord"
+                                            class="form-control" value="<%= event.dailyRecord %>" readonly>
+                                        <input name="lastModifiedAuthor" readonly type="text" value="<%= loginID %>">
+                                        <input name="zeroDate" id="zeroDate" readonly type="text" value="<%= zeroDate %>">
+                                        <input id="tmpzeroDate" readonly type="text" value="<%= zeroDate %>">
+                                        <input name="tenDate" id="tenDate" readonly type="text" value="<%= tenDate %>">
+                                        <input id="tmptenDate" readonly type="text" value="<%= tenDate %>">
+                                        <input id="sourceId" readonly type="text" value="<%= sourceId %>">
+                                        <input id="source" readonly type="text" value="<%= source %>">
+
+                                    </div>
+
+                                    <% } else if(active == '/farm') { %>
+                                    <div style="display:none">
+                                    <!-- <div> -->
+
+                                        <!-- create -->
+                                        <input type="text" name="loginID" id="loginID" value="<%= loginID %>">
+                                        <input type="text" name="id" id="id" value="<%= event.id %>">
+                                        <input type="text" name="initTagPointTime" id="initTagPointTime"
+                                            value="<%= event.tagPointTime %>">
+                                        <input type="text" name="initFilePath" id="initFilePath"
+                                            value="<%= fileName %>">
+                                        <input type="text" name="tagPointTime" id="tagPointTime"
+                                            value="<%= event.tagPointTime %>">
+                                        <input type="text" name="filePath" id="filePath" value="<%= fileName %>">
+                                        <input type="text" name="startPointTime" id="startPointTime"
+                                            value="<%= event.startPointTime %>">
+                                        <input type="text" name="endPointTime" id="endPointTime"
+                                            value="<%= event.endPointTime %>">
+                                        <input type="text" name="tagDateTmp" id="tagDateTmp"
+                                            value="<%= event.tagDate %>">
+                                        <!-- 用以重設之暫存 -->
+                                        <input type="text" id="tmptagDate" name="tmptagDate" class="form-control"
+                                            value="<%= event.tagDate %>" readonly>
+                                        <input type="text" id="tmpcowLabels" name="tmpcowLabels" class="form-control"
+                                            value="<%= event.cowLabels %>" readonly>
+                                        <input type="text" id="tmpcowNumbers" name="tmpcowNumbers" class="form-control"
+                                            value="<%= event.cowNumbers %>" readonly>
+                                        <input type="text" id="tmphard" name="tmphard" class="form-control"
+                                            value="<%= event.hard %>" readonly>
+                                        <input type="text" id="tmpdailyRecord" name="tmpdailyRecord"
+                                            class="form-control" value="<%= event.dailyRecord %>" readonly>
+                                        <input name="createdAuthor" readonly type="text" value="<%= loginID %>">
+                                        <input type="text" name="microId" id="microId" value="<%= microId %>">
+                                        <input name="zeroDate" id="zeroDate" readonly type="text" value="<%= new Date(zeroDate.getTime()+8*60*60*1000) %>">
+                                        <input id="tmpzeroDate" readonly type="text" value="<%= new Date(zeroDate.getTime()+8*60*60*1000) %>">
+                                        <input name="tenDate" id="tenDate" readonly type="text" value="<%= new Date(tenDate.getTime()) %>">
+                                        <input id="tmptenDate" readonly type="text" value="<%= new Date(tenDate.getTime()) %>">
+                                        <input name="sourceId" id="sourceId" readonly type="text" value="<%= sourceId %>">
+                                    </div>
+
+                                    <% } else {%>
+                                    <div style="display:none">
+                                    <!-- <div> -->
+                                        <!-- create -->
+                                        <input type="text" name="loginID" id="loginID" value="<%= loginID %>">
+                                        <input type="text" name="initFilePath" id="initFilePath"
+                                            value="<%= fileName %>">
+                                        <input type="text" name="tagPointTime" id="tagPointTime" value="">
+                                        <input type="text" name="filePath" id="filePath" value="<%= fileName %>">
+                                        <input type="text" name="startPointTime" id="startPointTime" value="">
+                                        <input type="text" name="endPointTime" id="endPointTime" value="">
+                                        <input type="text" name="tagDateTmp" id="tagDateTmp" value="">
+                                        <input name="createdAuthor" readonly type="text" value="<%= loginID %>">
+                                        <input type="text" name="microId" id="microId" value="<%= microId %>">
+                                        <input name="zeroDate" id="zeroDate" readonly type="text" value="<%= zeroDate %>">
+                                        <input id="tmpzeroDate" readonly type="text" value="<%= zeroDate %>">
+                                        <input name="tenDate" id="tenDate" readonly type="text" value="<%= tenDate %>">
+                                        <input id="tmptenDate" readonly type="text" value="<%= tenDate %>">
+                                        <input name="sourceId" id="sourceId" readonly type="text" value="<%= sourceId %>">
+                                    </div>
+                                    <%}%>
+                            </div>
+                        </div>
+                    </div>
+                    <% if (active == '/pro' && source!=null && source!="" ) {%>
+                        <% if (type=='audio') {%>
+                            <div style="margin: 0 0 1.5rem 0; background-color: #FFD4D4; padding: 1rem; border-radius: 1rem;">
+                                <div class="row" style="font-size: 1.25rem; font-weight: bold;">
+                                    <div class ="col-md-12">
+                                        原始音檔資訊：
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p class="col-md-6" style="font-size: 1.05rem;">音檔名稱：<%= source.audioname %></p>
+                                    <p class="col-md-6" style="font-size: 1.05rem;">麥克風編號：<%= source.microid %></p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-md-6" style="font-size: 1.05rem;">開始時間：<%=
+                                                source.starttime.getFullYear() + "-" +
+                                                (parseInt(source.starttime.getMonth()+1)<10 ? "0" + parseInt(source.starttime.getMonth()+1) : parseInt(source.starttime.getMonth()+1)) + "-" +
+                                                (source.starttime.getDate()<10? "0"+source.starttime.getDate() : source.starttime.getDate()) + " " +
+                                                (source.starttime.getHours()<10? "0"+source.starttime.getHours() : source.starttime.getHours()) + ":" +
+                                                (source.starttime.getMinutes()<10? "0"+source.starttime.getMinutes() : source.starttime.getMinutes()) + ":" +
+                                                (source.starttime.getSeconds()<10? "0"+source.starttime.getSeconds() : source.starttime.getSeconds())
+                                                %></p>
+                                    <p class="col-md-6" style="font-size: 1.05rem;">結束時間：<%=
+                                                source.endtime.getFullYear() + "-" +
+                                                (parseInt(source.endtime.getMonth()+1)<10 ? "0" + parseInt(source.endtime.getMonth()+1) : parseInt(source.endtime.getMonth()+1)) + "-" +
+                                                (source.endtime.getDate()<10? "0"+source.endtime.getDate() : source.endtime.getDate()) + " " +
+                                                (source.endtime.getHours()<10? "0"+source.endtime.getHours() : source.endtime.getHours()) + ":" +
+                                                (source.endtime.getMinutes()<10? "0"+source.endtime.getMinutes() : source.endtime.getMinutes()) + ":" +
+                                                (source.endtime.getSeconds()<10? "0"+source.endtime.getSeconds() : source.endtime.getSeconds())
+                                                %></p>
+
+                                </div>
+                        </div>
+
+                        <% }else if(type=='event'){ %>
+                            <div style="margin: 0 0 1.5rem 0; background-color: #FFD4D4; padding: 1rem; border-radius: 1rem;">
+                                <div class="row" style="font-size: 1.25rem; font-weight: bold;">
+                                    <div class ="col-md-12">
+                                        原始事件資訊：
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p class="col-md-6" style="font-size: 1.05rem;">分娩日期時間標記：<%=
+                                                source.tagDate.getFullYear() + "-" +
+                                                (parseInt(source.tagDate.getMonth()+1)<10 ? "0" + parseInt(source.tagDate.getMonth()+1) : parseInt(source.tagDate.getMonth()+1)) + "-" +
+                                                (source.tagDate.getDate()<10? "0"+source.tagDate.getDate() : source.tagDate.getDate()) + " " +
+                                                (source.tagDate.getHours()<10? "0"+source.tagDate.getHours() : source.tagDate.getHours()) + ":" +
+                                                (source.tagDate.getMinutes()<10? "0"+source.tagDate.getMinutes() : source.tagDate.getMinutes()) + ":" +
+                                                (source.tagDate.getSeconds()<10? "0"+source.tagDate.getSeconds() : source.tagDate.getSeconds())
+                                                %></p></p>
+                                    <p class="col-md-6" style="font-size: 1.05rem;">母牛編號標記：<%= source.cowLabels %></p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-md-3" style="font-size: 1.05rem;">分娩頭數標記：<%= source.cowNumbers %></p>
+                                    <p class="col-md-3" style="font-size: 1.05rem;">分娩難易度標記：<%= source.hard %></p>
+                                    <p class="col-md-6" style="font-size: 1.05rem;">單日事件紀錄：<%= source.dailyRecord %></p>
+
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } %>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tagDate">分娩日期時間標記</label>
+                                <% if (active == '/pro' || active == '/farm') { %>
+                                    <input autocomplete="off" class="form-control" id="tagDate" name="tagDate"
+                                        type="text">
+                                    <% } else { %>
+                                    <input autocomplete="off" class="form-control" id="tagDate" name="tagDate"
+                                        type="text">
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="cowLabels">母牛編號標記</label>
+                                    <% if (active == '/pro' || active == '/farm') { %>
+                                    <input class="form-control" id="cowLabels" name="cowLabels" required type="text"
+                                        value="<%= event.cowLabels %>">
+                                    <% } else { %>
+                                    <input class="form-control" id="cowLabels" name="cowLabels" required type="text">
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label for="cowNumbers">分娩頭數標記<span class="text-danger">*</span></label>
+
+                                        <% if (active == '/pro'||active == '/farm') { %>
+                                        <div class="row" style="padding: 0 1rem">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (event.cowNumbers == "0") { %>
+                                                <input checked="checked" class="custom-control-input" id="cowNumbers0"
+                                                    name="cowNumbers" type="radio" value="0">
+                                                <% } else { %>
+                                                <input class="custom-control-input" id="cowNumbers0" name="cowNumbers"
+                                                    type="radio" value="0">
+                                                <% } %>
+                                                <label class="custom-control-label" for="cowNumbers0">0</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (event.cowNumbers == "1") { %>
+                                                <input checked="checked" class="custom-control-input" id="cowNumbers1"
+                                                    name="cowNumbers" type="radio" value="1">
+                                                <% } else { %>
+                                                <input class="custom-control-input" id="cowNumbers1" name="cowNumbers"
+                                                    type="radio" value="1">
+                                                <% } %>
+                                                <label class="custom-control-label" for="cowNumbers1">1</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (event.cowNumbers == "2") { %>
+                                                <input checked="checked" class="custom-control-input" id="cowNumbers2"
+                                                    name="cowNumbers" type="radio" value="2">
+                                                <% } else { %>
+                                                <input class="custom-control-input" id="cowNumbers2" name="cowNumbers"
+                                                    type="radio" value="2">
+                                                <% } %>
+                                                <label class="custom-control-label" for="cowNumbers2">2</label>
+                                            </div>
+                                        </div>
+                                        <% }else{ %>
+                                        <div class="row" style="padding: 0 1rem">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input checked="checked" class="custom-control-input" id="cowNumbers0" name="cowNumbers"
+                                                    type="radio" value="0">
+                                                <label class="custom-control-label" for="cowNumbers0">0</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input class="custom-control-input" id="cowNumbers1" name="cowNumbers"
+                                                    type="radio" value="1">
+                                                <label class="custom-control-label" for="cowNumbers1">1</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <input class="custom-control-input" id="cowNumbers2" name="cowNumbers"
+                                                    type="radio" value="2">
+                                                <label class="custom-control-label" for="cowNumbers2">2</label>
+                                            </div>
+                                        </div>
+                                        <% } %>
+
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="hard">分娩難易度標記</label>
+                            </div>
+                            <div class="col-md-9">
+
+                                <% if (active == '/pro' || active == '/farm') { %>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <% if (event.hard == "一般牛鳴") { %>
+                                    <input checked class="custom-control-input" id="normal" name="hard" required type="radio"
+                                            value="一般牛鳴">
+                                    <% } else { %>
+                                    <input class="custom-control-input" id="normal" name="hard" required type="radio"
+                                            value="一般牛鳴">
+                                    <% } %>
+                                    <label class="custom-control-label" for="normal">一般牛鳴</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <% if (event.hard == '自然分娩') { %>
+                                    <input checked class="custom-control-input" id="birth" name="hard" type="radio"
+                                        value="自然分娩">
+                                    <% } else { %>
+                                    <input class="custom-control-input" id="birth" name="hard" type="radio" value="自然分娩">
+                                    <% } %>
+                                    <label class="custom-control-label" for="birth">自然分娩</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <% if (event.hard == '其他分娩') { %>
+                                    <input checked class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                        value="其他分娩">
+                                    <% } else { %>
+                                    <input class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                        value="其他分娩">
+                                    <% } %>
+                                    <label class="custom-control-label" for="abnormal">其他分娩</label>
+                                </div>
+                                <% } else { %>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input checked class="custom-control-input" id="normal" name="hard" type="radio"
+                                        value="一般牛鳴">
+                                    <label class="custom-control-label" for="normal">一般牛鳴</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="custom-control-input" id="birth" name="hard" type="radio"
+                                        value="自然分娩">
+                                    <label class="custom-control-label" for="birth">自然分娩</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                        value="其他分娩">
+                                    <label class="custom-control-label" for="abnormal">其他分娩</label>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <div class="row" style="display: none;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>溫度</label>
+                                    <input class="form-control" id="temperature" name="temperature" required type="text"
+                                        value="<%= temperature %>">
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="display: none;">
+                                <div class="form-group">
+                                    <label>濕度<span class="text-danger">*</span></label>
+                                    <input class="form-control" id="humidity" name="humidity" required type="text"
+                                        value="<%= humidity %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="dailyRecord">單日事件紀錄</label>
+                                    <textarea class="form-control" cols="32" id="dailyRecord" name="dailyRecord"
+                                        rows="3"><% if (active == '/pro' || active == '/farm') { %><%= event.dailyRecord %> <% } %></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row text-right">
+                            <!-- Grid column -->
+                            <div class="col-md-12">
+                                <% if (active == '/pro') { %>
+                                <input class="btn btn-info" id="edit_reset" type="button" value="重設">
+                                <input class="btn btn-primary" id='eventorm' type="submit" value="確定編輯">
+                                <a class="btn btn-danger btn-md" href="/pro">取消</a>
+                                <% } else if(active == '/farm') {%>
+                                <input class="btn btn-info" id="edit_reset" type="button" value="重設">
+                                <input class="btn btn-primary" type="submit" value="確定新增">
+                                <a class="btn btn-danger btn-md" href="/farm">取消</a>
+                                <% } else {%>
+                                <input class="btn btn-info" id="create_reset" type="button" value="重設">
+                                <input class="btn btn-primary" type="submit" value="確定新增">
+                                <a class="btn btn-danger btn-md" href="/audio">取消</a>
+                                <% } %>
+                            </div>
+                            <!-- Grid column -->
+                        </div>
+                    </form>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div aria-labelledby="libraryModalLabel" class="modal fade" id="libraryModal" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Audio Library Content</h4>
+                </div>
+                <div class="modal-body" id="audio-library-body">
+                    <table class="table table-hover" id="audio-table">
+                        <thead>
+                            <tr>
+                                <td class="col-md-1 text-center"></td>
+                                <td class="col-md-3">Title</td>
+                                <td class="col-md-3">Created at</td>
+                                <td class="col-md-3">Size</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
+                    <button class="btn btn-primary" data-dismiss="modal" id="modal-load" type="button">Load file
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+
+    <div id="snackbar"></div>
+    <div id="loading"></div>
+    <script src="/audioEditor/peaks.js"></script>
+    <script src="/audioEditor/audioEditor.js"></script>
+    <script>
+
+    </script>
+</body>
+<% include ./modals/loading.html %>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+    <title><%= title %></title>
+    <script src="/build/user_create.bundle.js"></script>
+</head>
+
+<body>
+<% include ../layout/header.html %>
+
+<main class="container-xl" role="main">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <h3><strong>創建使用者帳號</strong></h3>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form action="/user/create" id="user-edit-form" method="POST"
+            onsubmit="return window.validateUserInfo();">
+                <input id="uf_id" name="id" type="hidden">
+                <!-- Grid row -->
+                <div class="form-row">
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_username">帳號</label>
+                            <input class="form-control" id="uf_username" name="loginID"
+                                   required type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_name">使用者名稱<span class="text-danger">*</span></label>
+                            <input class="form-control" id="uf_name" name="userName" required
+                                   type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-2">
+                        <!-- Default checked -->
+                        <div class="form-group">
+                            <div class="form-group w-100">
+                                <label for="uf_roles">角色<span class="text-danger">*</span></label>
+                                <input class="form-control" id="uf_roles" readonly required type="text">
+                                <input class="form-control" id="roles" name="roles" readonly required
+                                       style="display:none;" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <br>
+                        <a id="selectRole" class="btn btn-sm btn-info" style="margin-top: 8px; font-size: 16px; height:38px;">
+                            <i aria-hidden="true" class="fa fa-user fa-lg mr-2"></i>選擇角色
+                        </a>
+                    </div>
+
+
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+
+                <!-- Grid row -->
+                <div class="form-row">
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="password">密碼</label>
+                            <input class="form-control" id="password" name="password"
+                                   type="password" autocomplete="new-password" required>
+                        </div>
+                    </div>
+
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="confirm_password">確認密碼</label>
+                            <input class="form-control" id="confirm_password" name="confirm_password"
+                                   type="password" autocomplete="new-password" required>
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_email">電子信箱</label>
+                            <input class="form-control" id="uf_email" name="email"
+                                   required type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+
+
+                <!-- Grid row -->
+                <div class="form-row">
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_phone">電話</label>
+                            <input class="form-control" id="uf_phone" name="tel" required
+                                   type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_job_title">職稱</label>
+                            <input class="form-control" id="uf_job_title" name="title"
+                                   type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_department">部門</label>
+                            <input class="form-control" id="uf_department" name="dept"
+                                   type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->
+
+                      <!-- Grid column -->
+                      <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="uf_line">line權杖</label>
+                            <input class="form-control" id="uf_line" name="line_token"
+                                   type="text">
+                        </div>
+                    </div>
+                    <!-- Grid column -->                   
+                </div>
+                <!-- Grid row -->
+
+
+                <!-- Grid row -->
+                <div class="form-row text-right">
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+                        <button class="btn btn-primary btn-md" id='user-create-submit' type="submit">
+                            <i aria-hidden="true" class="fa fa-check mr-3"></i>送出
+                        </button>
+                        <a class="btn btn-danger btn-md" href="/user">
+                            <i aria-hidden="true" class="fa fa-times fa-lg mr-3"></i>取消
+                        </a>
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<!-- selectRole Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="selectRoleModal" role="dialog"
+     tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle">
+                    <font face="微軟正黑體" size="6"><strong>選擇角色</strong></font>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <!-- <label for="roleOptList">角色</label> -->
+                        <div class="form-group" id='roleOptList'>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">關閉</button>
+                <button class="btn btn-primary" id="confirm" type="button">確定</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
