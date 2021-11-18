@@ -172,6 +172,4 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
             res.send(events);
         });
     });
-
-
 }

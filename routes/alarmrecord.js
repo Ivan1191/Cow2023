@@ -43,7 +43,6 @@ router.post('/thermal_reminder', function (req, res){
 });
 
 router.post('/specialsound_reminder', function (req, res){
-    console.log("specialsound_reminder========================================")
     User.find({}, function (err, users) {
         users.forEach(function(user){  
             if(user.loginID == req.session.loginID){

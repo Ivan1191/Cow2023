@@ -1,3 +1,5 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div class="container-fluid fixed-top bg-dark">
     <div class="row">
         <div class="col-12 text-left" style="color: white; line-height: 2rem;">
@@ -72,4 +74,41 @@
             <a class="nav-item nav-link" href="/signout">登出</a>
         </div>
     </div>
+    <script >
+        setInterval( function() {
+    
+        console.log("1111111111111")
+        reminder()        
+    },5000)
+    
+    function reminder(){
+        $.ajax({
+            url:'/alarmrecord/thermal_reminder',
+            method:'POST',
+            data:function () {
+            },    
+            success:function(res){
+                if(res){
+                    // console.log("thermal")
+                    document.getElementById("light").src="/red.png"
+                }else{
+                    document.getElementById("light").src="/blue.png"
+                }
+            },
+            error:function(err){console.log('thermal_reminder_err')},
+        });
+        $.ajax({
+            url:'/alarmrecord/specialsound_reminder',
+            method:'POST',
+            data:function () {
+            },    
+            success:function(res){
+                if(res){
+                    alert('牛隻叫聲異常');
+                }
+            },
+            error:function(err){console.log('specialsound_reminder_err')},
+        });
+    }
+    </script>
 </nav>

@@ -140,6 +140,8 @@ function reminder(){
             if(res){
                 // console.log("thermal")
                 document.getElementById("light").src="/red.png"
+            }else{
+                document.getElementById("light").src="/blue.png"
             }
         },
         error:function(err){console.log('thermal_reminder_err')},

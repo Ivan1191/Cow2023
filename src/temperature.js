@@ -317,3 +317,38 @@ $(document).ready(function () {
     };
 
 });
+
+setInterval( function() {
+    reminder()        
+},5000)
+
+function reminder(){
+    $.ajax({
+        url:'/alarmrecord/thermal_reminder',
+        method:'POST',
+        data:function () {
+        },    
+        success:function(res){
+            if(res){
+                // console.log("thermal")
+                document.getElementById("light").src="/red.png"
+            }else{
+                document.getElementById("light").src="/blue.png"
+            }
+        },
+        error:function(err){console.log('thermal_reminder_err')},
+    });
+    $.ajax({
+        url:'/alarmrecord/specialsound_reminder',
+        method:'POST',
+        data:function () {
+        },    
+        success:function(res){
+            if(res){
+                // console.log("special")
+                alert('牛隻叫聲異常');
+            }
+        },
+        error:function(err){console.log('specialsound_reminder_err')},
+    });
+}
