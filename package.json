@@ -19,7 +19,7 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.2",
     "chart.js": "^2.9.4",
-    "cheers-alert": "^1.4.1",
+    "cheers-alert": ".\\custom_package\\cheers-alert",
     "chokidar": "^3.4.2",
     "cookie-parser": "~1.4.3",
     "cookie-session": "^2.0.0-beta.1",
