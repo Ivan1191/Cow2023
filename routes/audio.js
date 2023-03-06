@@ -588,7 +588,7 @@ router.get('/edit', function (req, res, next) {
                 if(event.sourceId.length>25){
                     AudioRaw.findOne({ filePath: event.sourceId }, function(err, audio){
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
-                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now(), () => {
+                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
                             res.render('audio/editor', {
                                 title: 'Audio Editor',
@@ -1228,8 +1228,8 @@ router.post('/updateEventB', function (req, res) {
                                 var endTime = totalduration - lastTime;
                                 // console.log(lastTime)
                                 // console.log(totalduration-startTime-lastTime)
-    
-    
+
+
                                 // console.log("==========>  /event/A/create  開始  <==========")
                                 // console.log("fileNameList : " + fileNameList);
                                 // console.log("eventid : " + newevent.id);
@@ -1238,7 +1238,7 @@ router.post('/updateEventB', function (req, res) {
                                 // console.log("endTime : " + endTime);
                                 // console.log("timeStamp : " + timeStamp);
                                 // console.log("==========>  /event/A/create  結束  <==========")
-                                
+
                                 var outputFilePath = "D:/producedAudio/audioTen/" + eventB.id + ".wav";
                                 fs.unlink(outputFilePath, () => {});
 
@@ -1283,10 +1283,10 @@ router.post('/updateEventB', function (req, res) {
                         });
                     });
                 }
-                    
+
             );
         }else{
-            
+
 
             getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data)=>{
                 parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data)=>{
@@ -1350,7 +1350,7 @@ router.post('/updateEventB', function (req, res) {
                                 });
                             }
                         })
-                    
+
                     });
                 });
             });
