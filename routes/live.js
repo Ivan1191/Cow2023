@@ -11,86 +11,86 @@ module.exports = router;
 const Stream = require('node-rtsp-stream');
 const { scheduleJob } = require('node-schedule');
 
-const options = {
-  name: 'streamName',
-  //url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
-  streamUrl: 'rtsp://admin:admin@192.168.11.21',
-  //streamUrl: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
-  wsPort: 3333, 
-  ffmpegOptions: { 
-    '-stats': '', // an option with no neccessary value uses a blank string
-    '-rtsp_transport':'tcp',
-    '-initial_pause': 1,
-    //'-c':'copy',
-    //'-bufsize': 640000,  
-    //'-maxrate': 480000,
-    //'-pix_fmt': 'yuv420p',
-    '-r': 30,
-    //'-g': 60,
+// const options = {
+//   name: 'streamName',
+//   //url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
+//   streamUrl: 'rtsp://admin:admin@192.168.11.21',
+//   //streamUrl: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
+//   wsPort: 3333, 
+//   ffmpegOptions: { 
+//     '-stats': '', // an option with no neccessary value uses a blank string
+//     '-rtsp_transport':'tcp',
+//     '-initial_pause': 1,
+//     //'-c':'copy',
+//     //'-bufsize': 640000,  
+//     //'-maxrate': 480000,
+//     //'-pix_fmt': 'yuv420p',
+//     '-r': 30,
+//     //'-g': 60,
     
-    '-progress': 'pro1.log',
-    '-loglevel': 'error',
-    //'-nostats': '',
-    //'-reset_timestamps' : 1,
-    //'-timeout': -1,
-  }
-}
-stream = new Stream(options)
+//     '-progress': 'pro1.log',
+//     '-loglevel': 'error',
+//     //'-nostats': '',
+//     //'-reset_timestamps' : 1,
+//     //'-timeout': -1,
+//   }
+// }
+// stream = new Stream(options)
 
-const options1 = {
-  name: 'streamName',
-  //url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
-  streamUrl: 'rtsp://admin:admin@192.168.11.22',
-  //streamUrl: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
-  wsPort:4444, 
-  ffmpegOptions: { 
-    '-stats': '', // an option with no neccessary value uses a blank string
-    '-rtsp_transport':'tcp',
-    '-initial_pause': 1,
-    //'-c':'copy',
-    //'-bufsize': 640000,  
-    //'-maxrate': 480000,
-    //'-pix_fmt': 'yuv420p',
-    '-r': 30,
-    //'-g': 60,
-    '-progress': 'pro2.log',
-    '-loglevel': 'error',
-    //'-nostats': '',
-    //'-reset_timestamps' : 1,
-    //'-timeout': -1,
-  }
-}
-stream1 = new Stream(options1)
+// const options1 = {
+//   name: 'streamName',
+//   //url: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
+//   streamUrl: 'rtsp://admin:admin@192.168.11.22',
+//   //streamUrl: 'rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov',
+//   wsPort:4444, 
+//   ffmpegOptions: { 
+//     '-stats': '', // an option with no neccessary value uses a blank string
+//     '-rtsp_transport':'tcp',
+//     '-initial_pause': 1,
+//     //'-c':'copy',
+//     //'-bufsize': 640000,  
+//     //'-maxrate': 480000,
+//     //'-pix_fmt': 'yuv420p',
+//     '-r': 30,
+//     //'-g': 60,
+//     '-progress': 'pro2.log',
+//     '-loglevel': 'error',
+//     //'-nostats': '',
+//     //'-reset_timestamps' : 1,
+//     //'-timeout': -1,
+//   }
+// }
+// stream1 = new Stream(options1)
 
 
-schedule.scheduleJob('30 * * * * *', function(){
-  fs.readFile('pro1.log', function (err, data) {
-    if (err) throw err;
-    var data_string = data.toString();
-    var len = data_string.length;
-    console.log(len);
-    if ((data_string[len-4] == 'e') && (data_string[len-3] == 'n') && (data_string[len-2] == 'd')){
-      console.log("File1 has end");
-      stream.stop();
-      stream = new Stream(options)
-    }else{
-      console.log("File1 is successsssss");
-    }
-  });
-  fs.readFile('pro2.log', function (err, data) {
-    if (err) throw err;
-    var data_string = data.toString();
-    var len = data_string.length;
-    console.log(len);
-    if ((data_string[len-4] == 'e') && (data_string[len-3] == 'n') && (data_string[len-2] == 'd')){
-      console.log("File2 has end");
-      stream1.stop();
-      stream1 = new Stream(options1)
-    }else{
-      console.log("File2 is successsssss");
-    }
-  });
-})
+// schedule.scheduleJob('30 * * * * *', function(){
+//   fs.readFile('pro1.log', function (err, data) {
+//     if (err) throw err;
+//     var data_string = data.toString();
+//     var len = data_string.length;
+//     console.log(len);
+//     if ((data_string[len-4] == 'e') && (data_string[len-3] == 'n') && (data_string[len-2] == 'd')){
+//       console.log("File1 has end");
+//       stream.stop();
+//       stream = new Stream(options)
+//     }else{
+//       console.log("File1 is successsssss");
+//     }
+//   });
+//   fs.readFile('pro2.log', function (err, data) {
+//     if (err) throw err;
+//     var data_string = data.toString();
+//     var len = data_string.length;
+//     console.log(len);
+//     if ((data_string[len-4] == 'e') && (data_string[len-3] == 'n') && (data_string[len-2] == 'd')){
+//       console.log("File2 has end");
+//       stream1.stop();
+//       stream1 = new Stream(options1)
+//     }else{
+//       console.log("File2 is successsssss");
+//     }
+//   });
+// })
 
 router.get('/', function (req, res, next) {
     res.render('live', {

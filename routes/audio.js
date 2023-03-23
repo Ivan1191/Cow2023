@@ -626,7 +626,7 @@ router.get('/edit', function (req, res, next) {
                 }else{
                     EventA.findById({ _id: event.sourceId }, function(err, eventA){
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
-                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now(), () => {
+                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
                             res.render('audio/editor', {
                                 title: 'Audio Editor',
@@ -905,7 +905,7 @@ router.get('/view', function (req, res, next) {
                 if(event.sourceId.length>25){
                     AudioRaw.findOne({ filePath: event.sourceId }, function(err, audio){
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
-                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now(), () => {
+                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
                             res.render('audio/view', {
                                 title: 'Audio Editor',
@@ -943,7 +943,7 @@ router.get('/view', function (req, res, next) {
                 }else{
                     EventA.findById({ _id: event.sourceId }, function(err, eventA){
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
-                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now(), () => {
+                            fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
                             res.render('audio/view', {
                                 title: 'Audio Editor',
@@ -1131,12 +1131,15 @@ router.post('/updateEventB', function (req, res) {
             {
                 neweventstarttime = moment(req.body.tagDate).subtract(60, 'minutes');
                 neweventendtime = moment(req.body.tagDate);
+                console.log("自然分娩");
             }else
             {
                 neweventstarttime = moment(req.body.tagDate).subtract(30, 'minutes');
                 neweventendtime = moment(req.body.tagDate);
+                console.log("其他分娩");
             }
             var map = new Map();
+            console.log("尋找原始音檔");
             AudioRaw.find({
                     $or: [{
                         $and: [{
@@ -1187,6 +1190,7 @@ router.post('/updateEventB', function (req, res) {
                     }
 
                     // Add audio info into eventDB
+                    console.log(audios);
                     var audioarray = [];
                     for (audio of audios) {
                         macroid = audio.microid;
@@ -1206,7 +1210,78 @@ router.post('/updateEventB', function (req, res) {
                             map.set(audio.microid, audioarray);
                         }
                     }
-                    map.forEach(function (value, key, map1) {
+
+                    if(map.size==0)
+                    {
+                        getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data)=>{
+                            parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data)=>{
+                                var inputFileName = getFullFilePath(req.body.filePath);
+                                var outputFileName = 'D:/producedAudio/audioTen/' + req.body.id + ".wav";
+                                var cutExec = require('child_process').exec;
+                                var cutCommand = "ffmpeg.exe -y -i " + inputFileName + " -c copy " + outputFileName;
+                                // 逃避未剪檔導致輸入等於輸出之問題 感謝無名氏提供<3
+                                if (inputFileName === outputFileName) {
+                                    cutCommand = "dir";
+                                }
+                                cutExec(cutCommand, function (error, stdout, stderr) {
+                                    // console.log('stdout: ' + stdout); 必須被註解XD
+                                    // console.log('stderr: ' + stderr);
+                                    if (error !== null) {
+                                        // console.log('cutExec error: ' + error);
+                                        res.status(500).json({
+                                            result: -1,
+                                            //message: err
+                                        });
+                                        return;
+                                    }
+                                    EventB.findById(req.body.id, (err, event) => {
+                                        let ID = req.body["loginID"];
+                                        if (ID !== event.createdAuthor) {
+                                            removeDumpFile(req.body["loginID"], req.body["initFilePath"]);
+                                            res.redirect('/pro');
+                                        } else {
+                                            getFilePath(req).then((flag) => {
+                                                getTagPointTime(req).then((flag) => {
+                                                    removeDumpFile(req.body["loginID"], req.body["initFilePath"]);
+                                                    EventB.findByIdAndUpdate(req.body.id, {
+                                                        tagDate: req.body.tagDate,
+                                                        hard: req.body.hard,
+                                                        cowLabels: req.body.cowLabels,
+                                                        cowNumbers: req.body.cowNumbers,
+                                                        dailyRecord: req.body.dailyRecord,
+                                                        tagPointTime: req.body.tagPointTime,
+                                                        audioCat: req.body.hard,
+                                                        temperature: req.body.temperature,
+                                                        humidity: req.body.humidity,
+                                                        lastModifiedAuthor: req.body.lastModifiedAuthor,
+                                                        lastModifiedTime: new Date(),
+                                                        zeroDate: req.body.zeroDate,
+                                                        tenDate: req.body.tenDate,
+                                                        audioStart: data.audioStart,
+                                                        audioEnd: data.audioEnd,
+                                                    }, function (err) {
+                                                        if (err) {
+                                                            console.error(err);
+                                                            res.status(500).json({
+                                                                result: -1,
+                                                                message: err
+                                                            });
+                                                            return;
+                                                        } else {
+                                                            res.redirect('/pro');
+                                                        }
+                                                    });
+                                                });
+                                            });
+                                        }
+                                    })
+            
+                                });
+                            });
+                        });
+                    }
+
+                    map.forEach(function (value, key) {
                         var fileNameList = [];
                         checkifconcat(value, neweventstarttime, neweventendtime).then((flag) => {
                             if (flag == true) {
@@ -1272,7 +1347,7 @@ router.post('/updateEventB', function (req, res) {
                                                 });
                                                 return;
                                             } else {
-                                                //console.log( req.body["initFilePath"]);
+                                                // console.log( req.body["initFilePath"]);
                                                 removeDumpFile(req.body["loginID"], req.body["initFilePath"]);
                                                 res.redirect('/pro');
                                             }
