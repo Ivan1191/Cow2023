@@ -21,3 +21,17 @@
     3. test    
 
 - 執行 `npm run start`
+- `npm run development`
+
+
+# 增加功能列需改動的流程步驟
+增加之後要整個關掉在下 `npm run development` 比較不會出問題
+
+1. routes/api.js 的部分需要增加 
+    - seed system permissions 行的參數
+    - function setSeedRole 的權限
+
+2. app.js 的部分需要修改
+    - route 管理
+    - 頁面管理
+    - models 管理

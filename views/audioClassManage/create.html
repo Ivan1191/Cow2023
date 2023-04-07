@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+
+    <title><%= title %></title>
+
+    <script src="/dist/js/pace.min.js"></script>
+    <link href="/dist/css/pace.css" rel="stylesheet" />
+    <script src="/build/farm_create.bundle.js"></script>
+</head>
+
+<body>
+    <% include ../layout/header.html %>
+
+    <main class="container-xl" role="main">
+        <div class="row">
+            <div class="col-md-12">
+                <form id="eventACreateForm" action="/farm/createEventA" class="form-horizontal" method="POST">
+                    <div style="display: none;">
+                        <input class="form-control" name="createdAuthor" readonly type="text" value="<%= loginID %>">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <h3><strong>新增現場分娩事件</strong></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tagDate" id="tagDateTitle">分娩日期時間標記<span class="text-danger">*</span></label>
+                                <input autocomplete="off" class="form-control" id="tagDate" name="tagDate" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="cowLabels" id="cowLabelsTitle">母牛編號標記<span class="text-danger">*</span></label>
+                                <input class="form-control" id="cowLabels" name="cowLabels" required type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="cowNumbers" id="cowNumbersTitle">分娩頭數標記<span class="text-danger">*</span></label>
+                                    <div class="row" style="padding: 0 1rem">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input checked="checked" class="custom-control-input" id="cowNumbers0"
+                                                name="cowNumbers" type="radio" value="0">
+                                            <label class="custom-control-label" for="cowNumbers0">0</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input class="custom-control-input" id="cowNumbers1"
+                                                name="cowNumbers" type="radio" value="1">
+                                            <label class="custom-control-label" for="cowNumbers1">1</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <input class="custom-control-input" id="cowNumbers2" name="cowNumbers"
+                                                type="radio" value="2">
+                                            <label class="custom-control-label" for="cowNumbers2">2</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+
+                    <fieldset>
+                        <label for="hard" id="hardTitle">分娩難易度標記<span class="text-danger">*</span></label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input checked="checked" class="custom-control-input" id="normal" name="hard" type="radio"
+                                        value="一般牛鳴">
+                                    <label class="custom-control-label" for="normal">一般牛鳴</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="custom-control-input" id="birth" name="hard"
+                                        type="radio" value="自然分娩">
+                                    <label class="custom-control-label" for="birth">自然分娩</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                        value="其他分娩">
+                                    <label class="custom-control-label" for="abnormal">其他分娩</label>
+                                </div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="dailyRecord" id="dailyRecordTitle">單日事件紀錄</label>
+                                <textarea class="form-control" cols="32" id="dailyRecord" name="dailyRecord"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row text-right">
+                        <!-- Grid column -->
+                        <div class="col-md-12">
+                            <input class="btn btn-info" id="reset" type="button" value="重設">
+                            <input class="btn btn-primary" type="submit" value="確定新增">
+                            <a class="btn btn-default" href="/farm">取消</a>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

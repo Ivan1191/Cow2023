@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="" name="description">
+    <meta content="" name="author">
+    <link href="../../favicon.ico" rel="icon">
+
+    <title><%= title %></title>
+
+    <script src="/build/farm_edit.bundle.js"></script>
+</head>
+
+<body>
+    <% include ../layout/header.html %>
+
+    <main class="container-xl" role="main">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/farm/updateEventA" class="form-horizontal" id="eventForm" method="POST">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <h3><strong>編輯現場分娩事件</strong></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div style='display: none;'>
+                    <!-- <div> -->
+
+
+                        <input class="form-control" id="tmptagDate" name="tmptagDate" readonly type="text"
+                            value="<%= eventA.tagDate %>">
+                        <input class="form-control" id="tmpcowLabels" name="tmpcowLabels" readonly type="text"
+                            value="<%= eventA.cowLabels %>">
+                        <input class="form-control" id="tmpcowNumbers" name="tmpcowNumbers" readonly type="text"
+                            value="<%= eventA.cowNumbers %>">
+                        <input class="form-control" id="tmphard" name="tmphard" readonly type="text"
+                            value="<%= eventA.hard %>">
+                        <input class="form-control" id="tmpdailyRecord" name="tmpdailyRecord" readonly type="text"
+                            value="<%= eventA.dailyRecord %>">
+
+
+                        <input class="form-control" id="userName" name="lastModifiedAuthor" readonly type="text"
+                            value="<%= userName %>">
+
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="tagDate">分娩日期時間標記</label>
+                                <input class="form-control" disabled name="tagDate" readonly type="text"
+                                    value="<%= eventA.tagDate %>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="cowLabels">母牛編號標記<span class="text-danger">*</span></label>
+                                <input class="form-control" id="cowLabels" name="cowLabels" required type="text"
+                                    value="<%= eventA.cowLabels %>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label for="cowNumbers">分娩頭數標記<span class="text-danger">*</span></label>
+                                    <div class="row" style="padding: 0 1rem">
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <% if (eventA.cowNumbers == "0") { %>
+                                            <input checked="checked" class="custom-control-input" id="cowNumbers0"
+                                                name="cowNumbers" type="radio" value="0">
+                                            <% } else { %>
+                                            <input class="custom-control-input" id="cowNumbers0" name="cowNumbers"
+                                                type="radio" value="0">
+                                            <% } %>
+                                            <label class="custom-control-label" for="cowNumbers0">0</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <% if (eventA.cowNumbers == "1") { %>
+                                            <input checked="checked" class="custom-control-input" id="cowNumbers1"
+                                                name="cowNumbers" type="radio" value="1">
+                                            <% } else { %>
+                                            <input class="custom-control-input" id="cowNumbers1" name="cowNumbers"
+                                                type="radio" value="1">
+                                            <% } %>
+                                            <label class="custom-control-label" for="cowNumbers1">1</label>
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            <% if (eventA.cowNumbers == "2") { %>
+                                            <input checked="checked" class="custom-control-input" id="cowNumbers2"
+                                                name="cowNumbers" type="radio" value="2">
+                                            <% } else { %>
+                                            <input class="custom-control-input" id="cowNumbers2" name="cowNumbers"
+                                                type="radio" value="2">
+                                            <% } %>
+                                            <label class="custom-control-label" for="cowNumbers2">2</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <div class="col-md-12">
+                            <fieldset>
+                                <div class="form-group">
+                                <!-- <label for="hard">分娩難易度標記<span class="text-danger">*</span></label>
+                                <div class="row">
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <% if (eventA.hard == "一般牛鳴") { %>
+                                        <input  class="custom-control-input" checked id="normal" name="hard" required type="radio"
+                                                value="一般牛鳴">
+                                        <% } else { %>
+                                        <input  class="custom-control-input" id="normal" name="hard" required type="radio"
+                                                value="一般牛鳴">
+                                        <% } %>
+                                        <label class="custom-control-label" for="abnormal">一般牛鳴</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <% if (eventA.hard == "自然分娩") { %>
+                                        <input  class="custom-control-input" checked id="birth" name="hard" required type="radio"
+                                                value="自然分娩">
+                                        <% } else { %>
+                                        <input  class="custom-control-input" id="birth" name="hard" required type="radio" value="自然分娩">
+                                        <% } %>
+                                        <label class="custom-control-label" for="abnormal">自然分娩</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        <% if (eventA.hard == "其他分娩") { %>
+                                        <input  class="custom-control-input" checked id="abnormal" name="hard" required type="radio"
+                                                value="其他分娩">
+                                        <% } else { %>
+                                        <input  class="custom-control-input" id="abnormal" name="hard" required type="radio"
+                                                value="其他分娩">
+                                        <% } %>
+                                        <label class="custom-control-label" for="abnormal">其他分娩</label>
+                                    </div>
+                                </div> -->
+
+                                    <label for="hard" id="hardTitle">分娩難易度標記<span class="text-danger">*</span></label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (eventA.hard == "一般牛鳴") { %>
+                                                <input checked="checked" class="custom-control-input" id="normal" name="hard" type="radio"
+                                                    value="一般牛鳴">
+                                                <% } else { %>
+                                                    <input class="custom-control-input" id="normal" name="hard" type="radio"
+                                                    value="一般牛鳴">
+                                                <% } %>
+                                                <label class="custom-control-label" for="normal">一般牛鳴</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (eventA.hard == "自然分娩") { %>
+                                                <input checked="checked" class="custom-control-input" id="birth" name="hard"
+                                                    type="radio" value="自然分娩">
+                                                <% } else { %>
+                                                    <input class="custom-control-input" id="birth" name="hard"
+                                                    type="radio" value="自然分娩">
+                                                <% } %>
+                                                <label class="custom-control-label" for="birth">自然分娩</label>
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                <% if (eventA.hard == "其他分娩") { %>
+                                                <input checked="checked" class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                                    value="其他分娩">
+                                                <% } else { %>
+                                                    <input class="custom-control-input" id="abnormal" name="hard" type="radio"
+                                                    value="其他分娩">
+                                                <% } %>  
+                                                <label class="custom-control-label" for="abnormal">其他分娩</label>
+                                            </div>
+            
+                                        </div>
+                                    </div>
+                                
+                                <!-- <% if (eventA.hard == "順產") { %>
+                            <select class="form-control" id="hard" name="hard" required>
+                                <option selected value="順產" >順產</option>
+                                <option value="異常分娩">異常分娩</option>
+                            </select>
+                            <% } else { %>
+                                <select class="form-control" id="hard" name="hard" required>
+                                    <option value="順產">順產</option>
+                                    <option selected value="異常分娩">異常分娩</option>
+                                </select>
+                            <% }%> -->
+                                </div>.
+                            </fieldset>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="dailyRecord">單日事件紀錄</label>
+                                <textarea class="form-control" cols="32" id="dailyRecord" name="dailyRecord"
+                                    rows="3"><%= eventA.dailyRecord %></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row text-right">
+                        <!-- Grid column -->
+                        <div class="col-md-12">
+                            <input class="btn btn-info" id="reset" type="button" value="重設">
+                            <input class="btn btn-primary" type="submit" value="確定編輯">
+                            <a class="btn btn-danger btn-md" href="/farm">取消</a>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+
+                    <input id="id" name="id" type="hidden" value="<%= eventA.id %>">
+                </form> <!-- /form-->
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title><%= title %></title>
+
+    <script src="/build/audioClassManage.bundle.js"></script>
+</head>
+
+<body>
+<% include ../layout/header.html %>
+
+<div style="display: none;">
+    <input class="form-control" id="permissions" readonly type="text" value="<%= permissions %>">
+    <input class="form-control" id="role" readonly type="text" value="<%= role %>">
+    <input class="form-control" id="loginID" readonly type="text" value="<%= loginID %>">
+    <input class="form-control" id="errorMessage" readonly type="text" value="<%= errorMessage %>">
+</div>
+
+<main role="main" class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h3><strong>音檔分類管理介面</strong></h3>
+            <% if(role!="專家"){ %>
+            <a href="/farm/create" class="btn btn-primary">
+                <i aria-hidden="true" class="fa fa-plus fa-lg mr-2"></i>新增分類
+            </a>
+            <% } %>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="farm_list" class="table table-striped table-bordered" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>名稱</th>
+                        <th>路徑</th>
+                        <th>功能</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<% include ./modals/delete.html %>
+</body>
+
+</html>

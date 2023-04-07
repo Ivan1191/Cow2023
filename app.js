@@ -10,6 +10,8 @@ var mongoose2 = require('mongoose');
 var cookieSession = require('cookie-session');
 var schedule = require('node-schedule');
 
+
+// route 管理
 var user = require('./routes/user');
 var signin = require('./routes/signin');
 var batch = require('./routes/library/batch');
@@ -25,6 +27,8 @@ var live = require('./routes/live');
 var alarmrecord = require('./routes/alarmrecord');
 var backstage = require('./routes/backstage');
 var audioplayback = require('./routes/audioplayback');
+var audioClassManage = require('./routes/audioClassManage');
+
 
 var app = express();
 var auth = require('./auth');
@@ -44,7 +48,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/AnamalAudioManagement", {
             connectionTimeout: 0
         }
     }
-}, function(err) {
+}, function (err) {
     if (err) throw err;
 });
 
@@ -113,19 +117,19 @@ var sessionClearCheck = (req, res, next) => {
 
 var checkDataBaseConnection = (req, res, next) => {
     var state = mongoose.connection.readyState;
-    if(state==0){
+    if (state == 0) {
         res.render('signin/signin', {
             title: '可視化操作介面 - Sign in',
             errorMessage: '資料庫連線異常',
         });
-    }else if (state==1){
+    } else if (state == 1) {
         next();
-    }else if (state==2){
+    } else if (state == 2) {
         res.render('signin/signin', {
             title: '可視化操作介面 - Sign in',
             errorMessage: '資料庫連線中',
         });
-    }else if (state==3){
+    } else if (state == 3) {
         res.render('signin/signin', {
             title: '可視化操作介面 - Sign in',
             errorMessage: '資料庫連線異常',
@@ -133,6 +137,8 @@ var checkDataBaseConnection = (req, res, next) => {
     }
 }
 
+
+// 頁面管理
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join("D:/test/", 'wave')));
 app.use(express.static(path.join("D:/", 'producedAudio')));
@@ -150,9 +156,10 @@ app.use('/profile', checkDataBaseConnection, sessionClearCheck, loginCheck, dupl
 app.use('/role', checkDataBaseConnection, sessionClearCheck, loginCheck, duplicateLoginCheck, auth.acl.middleware(1, auth.get_user_id), rolee);
 app.use('/backstage', checkDataBaseConnection, sessionClearCheck, loginCheck, duplicateLoginCheck, auth.acl.middleware(1, auth.get_user_id), backstage);
 app.use('/audioplayback', checkDataBaseConnection, sessionClearCheck, loginCheck, duplicateLoginCheck, auth.acl.middleware(1, auth.get_user_id), audioplayback);
+app.use('/audioClassManage', checkDataBaseConnection, sessionClearCheck, loginCheck, duplicateLoginCheck, audioClassManage);
 
 
-
+// models 管理
 var user = require('./models/user');
 var workspace = require('./models/workspace');
 var eventA = require('./models/eventA');
@@ -168,7 +175,8 @@ var specialsound = require('./models/specialsound');
 // var htC = require('./models/htC');
 // var htD = require('./models/htD');
 var permission = require('./models/permission');
-var apiRoutes = require('./routes/api')(app, mongoose, conn, user, workspace, eventA, eventB, audioRaw, audioTen, role, permission, htA, htB, alarmrecord, thermal, specialsound);
+var audioClassManage = require('./models/audioClassManage');
+var apiRoutes = require('./routes/api')(app, mongoose, conn, user, workspace, eventA, eventB, audioRaw, audioTen, role, permission, htA, htB, alarmrecord, thermal, specialsound, audioClassManage);
 
 // Check add file per times
 var rule = new schedule.RecurrenceRule();
@@ -189,7 +197,6 @@ app.use(function (req, res, next) {
 });
 
 // check if every audioRaw is inDB, if no then add
-
 
 
 // error handlers
@@ -217,7 +224,7 @@ app.use(function (err, req, res, next) {
 });
 
 var rule_sec = new schedule.RecurrenceRule();
-rule_sec.second = [0,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57];
+rule_sec.second = [0, 3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57];
 var j = schedule.scheduleJob(rule_sec, function () {
     line.remind_all()
 });
@@ -229,8 +236,8 @@ var video = require('./routes/library/video');
 //video.record_rtsp2()
 var rule_min = new schedule.RecurrenceRule();
 // rule_min.minute = [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60];
-rule_min.minute = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60];
-var k = schedule.scheduleJob(rule_min, function(){
+rule_min.minute = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60];
+var k = schedule.scheduleJob(rule_min, function () {
 
     video.pic_rtsp_1()
     video.pic_rtsp_2()

@@ -93,6 +93,10 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
                     permission: '/alarmrecord',
                     name: '警示紀錄'
                 },
+                {
+                    permission: '/audioClassManage',
+                    name: '音檔分類管理'
+                },
             ];
             perms.forEach(function (current) {
                 var perm = new Permission();
@@ -115,7 +119,7 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
                 console.error(err);
             } else if (!role.length) {
                 var roleArray = [
-                    ['管理員', 'Admin', ['/user', '/role', '/report', '/profile', '/audio', '/pro', '/farm', '/backstage', '/temperature', '/live', '/alarmrecord','/audioplayback']],
+                    ['管理員', 'Admin', ['/user', '/role', '/report', '/profile', '/audio', '/pro', '/farm', '/backstage', '/temperature', '/live', '/alarmrecord','/audioplayback','/audioClassManage']],
                     ['專家', 'Expert', ['/report', '/profile', '/audio', '/pro', '/farm', '/temperature', '/live', '/alarmrecord','/audioplayback']],
                     ['現場人員', 'Worker', ['/farm', '/profile', '/temperature', '/live', '/alarmrecord','/audioplayback']]
                 ];

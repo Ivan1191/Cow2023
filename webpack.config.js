@@ -27,6 +27,10 @@ module.exports = {
         live: './src/live.js',
         alarmrecord: './src/alarmrecord.js',
         audioplayback: './src/audioplayback.js',
+
+        audioClassManage: './src/audioClassManage/audioClassManage.js',
+        audioClassManage_create: './src/audioClassManage/create.js',
+        audioClassManage_edit: './src/audioClassManage/edit.js',
     },
 
     output: {
