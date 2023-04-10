@@ -20,25 +20,8 @@ $(document).ready(function () {
     }, false);
 
     $('#reset').click(function (evt) {
-        $('#cowLabels').val($('#tmpcowLabels').val());
-
-        if ($('#tmpcowNumbers').val() == "0") {
-            $('#cowNumbers0').prop("checked", true);
-        } else if($('#tmpcowNumbers').val() == "1"){
-            $('#cowNumbers1').prop("checked", true);
-        } else if($('#tmpcowNumbers').val() == "2"){
-            $('#cowNumbers2').prop("checked", true);
-        }
-
-        if ($('#tmphard').val() == "一般牛鳴") {
-            $('#normal').prop("checked", true);
-        } else if ($('#tmphard').val() == "自然分娩") {
-            $('#birth').prop("checked", true);
-        } else if ($('#tmphard').val() == "其他分娩"){
-            $('#abnormal').prop("checked", true);
-        }
-
-        $('#dailyRecord').val($('#tmpdailyRecord').val());
+        $('#Name').val($('#tmpName').val());
+        $('#filePath').val($('#tmpfilePath').val());
     });
 
 });
