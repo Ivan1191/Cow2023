@@ -2,22 +2,28 @@ var fs = require('fs');
 var path = require("path");
 var join = require('path').join;
 
+//錄無聲影片的部分，暫時沒有用
 const picpath_1 = 'D:/test/pic1/'
 const picpath_2 = 'D:/test/pic2/'
 const videopath_1 = 'D:/test/nosound1/';
 const videopath_2 = 'D:/test/nosound2/';
 const rtsp_1 = 'rtsp://admin:admin@192.168.11.21'
 const rtsp_2 = 'rtsp://admin:admin@192.168.11.22'
+//-----
+
 // const rtsp_1 ="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
 // const rtsp_2 ="rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov"
+
+//影音剪輯的部分
 const audiopath_1 = 'D:/test/wave/cow-mic1';
 const audiopath_2 = 'D:/test/wave/cow-mic3';
 const savebuffer_all = 'D:/test/buffer';
-
 const savebuffer = 'D:\\test\\buffer\\';
 const savepath_1 = 'D:\\test\\final\\';
 const savepath_2 = 'D:\\test\\final1\\';
 const Blank_audio_file = 'D:\\test\\5min.wav' //空白wav檔
+//-----
+
 
 var timemap = []
 var suitabletime = []
@@ -48,7 +54,7 @@ function get_time(){
     ((today.getSeconds() < 10 ? ("0"+today.getSeconds()) : today.getSeconds())) ;
     return currentDateTime
 }
- 
+
 function Pic_rtsp_1(){ //錄無聲影片
     var concateExec = require('child_process').exec;
     var child = concateExec('ffmpeg -i ' + rtsp_1 + ' -y -q:v 2 -f mjpeg -frames:v 1 -s 960x540 ' + picpath_1 + get_time() + '.jpg', function (error, stdout, stderr) {
@@ -57,8 +63,8 @@ function Pic_rtsp_1(){ //錄無聲影片
         }
         //Record_rtsp_1();
     });
-} 
- 
+}
+
 function Pic_rtsp_2(){ //錄無聲影片
     var concateExec = require('child_process').exec;
     var child = concateExec('ffmpeg -i ' + rtsp_2 + ' -y -q:v 2 -f mjpeg -frames:v 1 -s 960x540 ' + picpath_2 + get_time() + '.jpg', function (error, stdout, stderr) {
@@ -145,7 +151,7 @@ function Get_Files(Path){ //取得資料夾下所有檔名及副檔名
             if(stat.isDirectory() === true) {
                 findFile(fPath);
             }
-            if (stat.isFile() === true) { 
+            if (stat.isFile() === true) {
                 Files.push(fPath);
             }
         });
@@ -227,7 +233,7 @@ function Find_Suitable_Time_Cut(audioname, video){ //取出對應時間
         if(Math.abs(v_total_sec - a_total_sec) <= 300){
             suitabletime.push(audioname[j])
             Fill_Timemap(audioname[j],v_total_sec,a_total_sec,1)
-        }  
+        }
     }
 }
 
@@ -259,7 +265,7 @@ function Merge_Cut_Audio(video1,name_buf){ //合並剪下來的音檔 & 輸出�
                 for(k = j + 1; k < 300; k++){
                     if(timemap[k] != 0)
                         break
-                }             
+                }
                 Cut_Audio(Blank_audio_file, start_time, k-j-1, num.toString())
                 j = k-1
                 order.push(num)
@@ -291,25 +297,25 @@ function Merge_Cut_Audio(video1,name_buf){ //合並剪下來的音檔 & 輸出�
             setTimeout(Merge_Audio_Video, 200, savebuffer + num.toString() + '.wav', video1, savepath_2 + video1.substring(video1.length-19,video1.length-4) + '.mp4')
             if( fs.existsSync(videopath_2 + video1.substring(v_length-19, v_length)) )
                 setTimeout(Delete_File,35000,videopath_2,video1.substring(v_length-19, v_length)) //到時改成rtsp下來的影片
-        }  
+        }
     }
 }
 
 function Delete_File(url,name){ //刪除資料夾下指定檔案
     // console.log("Delete_File")
-    var files = [];   
-    if( fs.existsSync(url) ) {    //判断给定的路径是否存在      
+    var files = [];
+    if( fs.existsSync(url) ) {    //判断给定的路径是否存在
         files = fs.readdirSync(url);    //返回文件和子目录的数组
         files.forEach(function(file,index){
             var curPath = path.join(url,file);
             if(fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
                 deleteFile(curPath,name);
-            } else {    
+            } else {
                 if(file.indexOf(name)>-1){    //是指定文件，则删除
                     fs.unlinkSync(curPath);
                     console.log("删除文件："+curPath);
                 }
-            }  
+            }
         });
     }else{
         console.log("给定的路径不存在！");
@@ -325,7 +331,7 @@ function Delete_Dir(url){ //刪除整個資料夾
             var curPath = path.join(url,file);
             if(fs.statSync(curPath).isDirectory()) { //同步读取文件夹文件，如果是文件夹，则函数回调
                 deleteDir(curPath);
-            } else {    
+            } else {
                 fs.unlinkSync(curPath);    //是指定文件，则删除
             }
         });
@@ -414,7 +420,7 @@ function Find_Suitable_Time_NoCut(audioname, video){ //取出對應時間
         if(Math.abs(v_total_sec - a_total_sec) <= 300){
             suitabletime.push(audioname[j])
             Fill_Timemap(audioname[j],v_total_sec,a_total_sec,0)
-        }  
+        }
     }
 }
 
@@ -459,7 +465,7 @@ function main(video1,name_buf){ //正常cut
     Find_Suitable_Time_Cut(audioname1, video1)
     Define_Innormal_Time(v_date, video1, audiopath_2)
     Find_Suitable_Time_Cut(audioname2, video1)
-    setTimeout(Merge_Cut_Audio,200,video1,name_buf);   
+    setTimeout(Merge_Cut_Audio,200,video1,name_buf);
 }
 
 module.exports = {

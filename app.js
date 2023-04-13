@@ -186,7 +186,7 @@ var j = schedule.scheduleJob(rule, function () {
 });
 
 // watch
-// batch.audio2DB(eventA, audioRaw, audioTen);
+batch.audio2DB(eventA, audioRaw, audioTen);
 batch.scanAudio(eventA, audioRaw, audioTen);
 
 // catch 404 and forward to error handler
