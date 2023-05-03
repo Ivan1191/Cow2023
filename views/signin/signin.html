@@ -13,35 +13,53 @@
     <link href="/favicon.svg" rel="icon" sizes="any" type="image/svg+xml">
     <title><%= title %></title>
     <script src="/build/signin.bundle.js"></script>
+    <style>
+        body {
+            background: #FFF;
+        }
+
+        .containerbody{
+            position: absolute;
+            top: 3%;
+            left: 2%;
+            width: 96%;
+            height: 94%;
+            background: #FFFCE6 0% 0% no-repeat padding-box;
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
-<div class="container" id="container">
-    <form class="form-signin" id="form-signin">
-        <h2 class="form-signin-heading">
-            <div class="row justify-content-md-center">
-                <!-- <a href="/">
-                    可視化操作系統介面
-                </a> -->
-                <img height="350" sizes="any" src="/favicon.svg" type="image/svg+xml" width="350">
-                <br>
-                <div class="title" style="font-size: 1.5rem; text-align: center;">母牛分娩之環控設施自動感知及難產聲音追蹤監控系統</div>
-            </div>
-        </h2>
+<div class="containerbody">
+    <div class="container" id="container">
+        <div style="text-align: center;padding-top: 15%;">
+            <img style="width: 230px;height: 230px;" src="/favicon.svg" type="image/svg+xml">
+        </div>
+        <div class="title" style="font-size: 1.5rem; text-align: center;">母牛分娩之環控設施自動感知及難產聲音追蹤監控系統</div>
         <br/>
-        <label class="sr-only" for="inputUsername">帳號</label>
-        <input autofocus class="form-control" id="inputUsername" placeholder="帳號" required type="text">
-        <label class="sr-only" for="inputPassword">密碼</label>
-        <input class="form-control" id="inputPassword" placeholder="密碼" required type="password">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
-        <% if(locals.errorMessage){ %>
-            <input type="text" id="error" class="form-control" name="error" value="<%= errorMessage %>" style="display: none;" readonly>
-        <% } %>
-
-    </form>
-
-</div> <!-- /container -->
-
+        <form class="form-signin" id="form-signin">
+            <label class="sr-only" for="inputUsername">帳號</label>
+            <input autofocus class="form-control" id="inputUsername" placeholder="帳號" required type="text">
+            <label class="sr-only" for="inputPassword">密碼</label>
+            <input class="form-control" id="inputPassword" placeholder="密碼" required type="password">
+            <div class="form-group">
+                <div style="font-size: 26px; white-space: nowrap; text-align: center;">請選擇角色</div>
+                <select class="form-control" id="uf_role" required name="role">
+                    <option selected value="">選擇角色</option>
+                    <option value="Admin">管理員</option>
+                    <option value="Expert">專家</option>
+                    <option value="Worker">現場人員</option>
+                </select>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
+            <% if(locals.errorMessage){ %>
+            <input type="text" id="error" class="form-control" name="error" value="<%= errorMessage %>"
+                   style="display: none;" readonly>
+            <% } %>
+        </form>
+    </div> <!-- /container -->
+</div>
 <script>
     window.history.pushState("", "", '/signin');
 </script>

@@ -64,44 +64,7 @@ router.post('/', function (req, res) {
             sess.uuid = auth.loginIDandSessionIDMap[req.body["loginID"]];
             sess.loginID = user.loginID;
             sess.userName = user.userName;
-            Role.find({}, function (err, roles) {
-                // console.log(roles);
-                if (roles.length) {
-                    res.render('signin/choose', {
-                        title: 'Role Choose',
-                        user: user,
-                        roles: roles,
-                    });
-                } else {
-                    res.redirect(204, '/signin');
-                }
-            });
-        }
 
-    });
-});
-
-router.post('/chooseRole' , function (req, res) {
-    var sess = req.session;
-
-    User.findOne({
-        loginID: sess.loginID
-    }, function (err, user) {
-        if (err) {
-            res.status(500).json({
-                result: -1,
-                message: err
-            });
-            return;
-        } else if (!user) {
-            res.status(404).json({
-                result: 0,
-                message: 'invalid username'
-            });
-            return;
-        } else {
-            //二次檢查角色是否在用戶可使用之角色中，防止攻擊
-            // console.log(user.roles.includes(req.body.role))
             if (user.roles.includes(req.body.role)) {
                 Role.find({}, function (err, roles) {
                     if (roles.length) {
@@ -121,7 +84,11 @@ router.post('/chooseRole' , function (req, res) {
                             message: 'success',
                             dist: '/profile'
                         });
-
+                                // res.render('signin/choose', {
+                                //     title: 'Role Choose',
+                                //     user: user,
+                                //     roles: roles,
+                                // });
                     } else {
                         res.redirect(204, '/signin');
                     }
@@ -129,13 +96,11 @@ router.post('/chooseRole' , function (req, res) {
             } else {
                 res.status(404).json({
                     result: 0,
-                    message: 'invalid role'
+                    message: '錯誤的角色'
                 });
                 return;
             }
-
         }
-
     });
 });
 
