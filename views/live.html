@@ -17,7 +17,7 @@
 <body>
     <% include ./layout/header.html %>
     <canvas  width="200" height="70"></canvas>
-    <main role="main" class="container-fluid">
+    <main role="main" class="container-fluid new-bgcolor">
         <div>
             <div style="display:flex; width: 100%; justify-content:center;">
                 <select class="selectpicker" style="margin-right: 0.5rem">
@@ -34,7 +34,7 @@
                     var url = 'ws:///cow2020.ddns.net:3333';
                     var canvas = document.getElementById('video-canvas1');
                     var player = new JSMpeg.Player(url,{
-                                                        canvas: canvas, 
+                                                        canvas: canvas,
                                                         audio: true
                                                     });
                 </script>
@@ -46,7 +46,7 @@
                     var url = 'ws://cow2020.ddns.net:4444';
                     var canvas = document.getElementById('video-canvas2');
                     var player = new JSMpeg.Player(url,{
-                                                        canvas: canvas, 
+                                                        canvas: canvas,
                                                         audio: true
                                                     });
                 </script>

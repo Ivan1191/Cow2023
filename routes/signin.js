@@ -82,13 +82,8 @@ router.post('/', function (req, res) {
                         res.status(200).json({
                             result: 1,
                             message: 'success',
-                            dist: '/profile'
+                            dist: '/live'
                         });
-                                // res.render('signin/choose', {
-                                //     title: 'Role Choose',
-                                //     user: user,
-                                //     roles: roles,
-                                // });
                     } else {
                         res.redirect(204, '/signin');
                     }

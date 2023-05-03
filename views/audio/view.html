@@ -14,13 +14,13 @@
     <link href="/css/audioEditor.css" rel="stylesheet">
     <script src="/build/audio_editor.bundle.js"></script>
     <script src="../../routes/api.js"></script>
-    
+
 </head>
 
 <body>
 <% include ../layout/header.html %>
 <div id="view" style="visibility: hidden;"></div>
-<main class="container-xl" role="main">
+<main class="container-xl new-bgcolor" role="main">
     <div id="waveform-container">
         <div id="zoomview-container"></div>
         <div id="overview-container"></div>
@@ -261,7 +261,7 @@
                             <% if (event.hard == '一般牛鳴') { %>
                             <input checked class="custom-control-input" id="birth" name="hard" type="radio"
                             value="一般牛鳴">
-                            <label class="custom-control-label" for="birth">一般牛鳴</label>   
+                            <label class="custom-control-label" for="birth">一般牛鳴</label>
                             <% } else if(event.hard == '自然分娩') {%>
                             <input checked class="custom-control-input" id="birth" name="hard" type="radio"
                                    value="自然分娩">

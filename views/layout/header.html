@@ -1,117 +1,94 @@
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<div class="container-fluid fixed-top bg-dark">
+<link rel="stylesheet" href="../css/navbar-fixed-left.min.css">
+<style>
+    .new-bgcolor {
+        background-color: #FFFCE6;
+        height: 934px;
+    }
+
+    .bg-active {
+        background-color: #FFFCE6;
+    }
+
+    .new-padding-left {
+        padding-left: 30px;
+    }
+</style>
+<div class="container-fluid fixed-top bg-white navbar-light">
     <div class="row">
-        <div class="col-12 text-left" style="color: white; line-height: 2rem;">
+        <div class="col-12 text-left" style="font-size: large;">
             母牛分娩之環控設施自動感知及難產聲音追蹤監控系統
         </div>
     </div>
 </div>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="margin-top: 34px;">
-    <a class="navbar-brand" href="/">
-        <img height="30" src="/logo.png">
-    </a>
-    <button class="navbar-toggler" data-target="#navbarCollapse" data-toggle="collapse" type="button">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
+<nav class="navbar navbar-expand-md navbar-light fixed-left bg-white" style="margin-top: 50px;">
+    <div style="text-align: center;width: 100%;">
+        <a class="navbar-brand" href="/" ><img height="150" src="/logo.png"></a>
+    </div>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav">
+            <a class="nav-link disabled" href="javascript:void(0)"
+               style="color: #707070;font-size: 20px;text-decoration: underline;"><%= userName %> [<%= role %>]</a>
+
             <% if(permissions.includes('/farm')){ %>
-            <a class="nav-item nav-link <% if (active == '/farm') { %> active <% } %>" href="/farm">可視化系統操作介面</a>
+            <a class="nav-item nav-link <% if (active == '/farm') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/farm">可視化系統操作介面</a>
             <% } %>
 
             <% if(permissions.includes('/pro')){ %>
-            <a class="nav-item nav-link <% if (active == '/pro') { %> active <% } %>" href="/pro">聲紋特徵分析系統</a>
+            <a class="nav-item nav-link <% if (active == '/pro') { %> active bg-active <% } %>" style="padding-left: 25px;" href="/pro">聲紋特徵分析系統</a>
             <% } %>
 
             <% if(permissions.includes('/audioplayback')){ %>
-            <a class="nav-item nav-link <% if (active == '/audioplayback') { %> active <% } %>" href="/audioplayback">剪輯音檔播放介面</a>
+            <a class="nav-item nav-link <% if (active == '/audioplayback') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/audioplayback">剪輯音檔播放介面</a>
             <% } %>
 
             <% if(permissions.includes('/audio')){ %>
-            <a class="nav-item nav-link <% if (active == '/audio') { %> active <% } %>" href="/audio">原始音檔管理</a>
-            <% } %>
-
-            <% if(permissions.includes('/user')){ %>
-            <a class="nav-item nav-link <% if (active == '/user') { %> active <% } %>" href="/user">使用者帳號管理</a>
-            <% } %>
-
-            <% if(permissions.includes('/role')){ %>
-            <a class="nav-item nav-link <% if (active == '/role') { %> active <% } %>" href="/role">角色權限管理</a>
+            <a class="nav-item nav-link <% if (active == '/audio') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/audio">原始音檔管理</a>
             <% } %>
 
             <% if(permissions.includes('/report')){ %>
-            <a class="nav-item nav-link <% if (active == '/report') { %> active <% } %>" href="/report">週期統計圖表</a>
+            <a class="nav-item nav-link <% if (active == '/report') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/report">週期統計圖表</a>
             <% } %>
 
             <% if(permissions.includes('/temperature')){ %>
-            <a class="nav-item nav-link <% if (active == '/temperature') { %> active <% } %>"
-                href="/temperature">溫溼度列表</a>
+            <a class="nav-item nav-link <% if (active == '/temperature') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/temperature">溫溼度列表</a>
             <% } %>
 
             <% if(permissions.includes('/live')){ %>
-            <a class="nav-item nav-link <% if (active == '/live') { %> active <% } %>" href="/live">即時預覽頁面</a>
+            <a class="nav-item nav-link <% if (active == '/live') { %> active bg-active <% } %>" style="padding-left: 25px;" href="/live">即時預覽頁面</a>
             <% } %>
 
             <% if(permissions.includes('/alarmrecord')){ %>
-            <a class="nav-item nav-link <% if (active == '/alarmrecord') { %> active <% } %>" href="/alarmrecord">警示紀錄</a>
+            <a class="nav-item nav-link <% if (active == '/alarmrecord') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/alarmrecord">警示紀錄</a>
             <% } %>
 
             <% if(permissions.includes('/audioClassManage')){ %>
-            <a class="nav-item nav-link <% if (active == '/audioClassManage') { %> active <% } %>" href="/audioClassManage">音檔分類管理</a>
+            <a class="nav-item nav-link <% if (active == '/audioClassManage') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/audioClassManage">音檔分類管理</a>
             <% } %>
         </div>
-        <div class="navbar-nav ml-auto">
-            <a class="navbar-brand">
-                <img id='light' height="20" src="/blue.png">
-            </a>
-
+        <div class="navbar-nav" style="padding-top: 100px;">
+            <a class="nav-item nav-link <% if (active == '/profile') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/profile">個人資料修改</a>
             <% if(permissions.includes('/backstage')){ %>
-            <a class="nav-item nav-link <% if (active == '/backstage') { %> active <% } %>"
-                href="/backstage">後台管理</a>
+            <a class="nav-item nav-link <% if (active == '/backstage') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/backstage">後台管理</a>
             <% } %>
-            <a class="nav-item nav-link <% if (active == '/profile') { %> active <% } %>" href="/profile">個人資料</a>
-            <a class="nav-link disabled" href="javascript:void(0)" style="color: cornflowerblue">[<%= role %>]</a>
-            <a class="nav-link disabled" href="javascript:void(0)" style="color: wheat"><%= userName %></a>
-            <a class="nav-item nav-link" href="/signout">登出</a>
+            <% if(permissions.includes('/role')){ %>
+            <a class="nav-item nav-link <% if (active == '/role') { %> active bg-active <% } %>" style="padding-left: 25px;" href="/role">角色權限管理</a>
+            <% } %>
+            <% if(permissions.includes('/user')){ %>
+            <a class="nav-item nav-link <% if (active == '/user') { %> active bg-active <% } %>" style="padding-left: 25px;"
+               href="/user">使用者帳號管理</a>
+            <% } %>
+            <!--            <a class="nav-item nav-link" href="/signout">登出</a>-->
+            <a class="btn btn-secondary" href="/signout">登出</a>
         </div>
     </div>
-    <!-- <script >
-        setInterval( function() {
-
-        console.log("1111111111111")
-        reminder()
-    },5000)
-
-    function reminder(){
-        $.ajax({
-            url:'/alarmrecord/thermal_reminder',
-            method:'POST',
-            data:function () {
-            },
-            success:function(res){
-                if(res){
-                    // console.log("thermal")
-                    document.getElementById("light").src="/red.png"
-                }else{
-                    document.getElementById("light").src="/blue.png"
-                }
-            },
-            error:function(err){console.log('thermal_reminder_err')},
-        });
-        $.ajax({
-            url:'/alarmrecord/specialsound_reminder',
-            method:'POST',
-            data:function () {
-            },
-            success:function(res){
-                if(res){
-                    alert('牛隻叫聲異常');
-                }
-            },
-            error:function(err){console.log('specialsound_reminder_err')},
-        });
-    }
-    </script> -->
 </nav>

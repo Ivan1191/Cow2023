@@ -17,7 +17,7 @@
 <body>
     <% include ../layout/header.html %>
 
-    <main class="container-xl" role="main">
+    <main class="container-xl new-bgcolor" role="main">
         <div class="row">
             <div class="col-md-12">
                 <form action="/farm/updateEventA" class="form-horizontal" id="eventForm" method="POST">
@@ -178,13 +178,13 @@
                                                 <% } else { %>
                                                     <input class="custom-control-input" id="abnormal" name="hard" type="radio"
                                                     value="其他分娩">
-                                                <% } %>  
+                                                <% } %>
                                                 <label class="custom-control-label" for="abnormal">其他分娩</label>
                                             </div>
-            
+
                                         </div>
                                     </div>
-                                
+
                                 <!-- <% if (eventA.hard == "順產") { %>
                             <select class="form-control" id="hard" name="hard" required>
                                 <option selected value="順產" >順產</option>
