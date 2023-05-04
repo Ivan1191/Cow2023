@@ -25,137 +25,128 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-                <form action="/user/edit" id="user-edit-form" method="POST"
-                onsubmit="return window.validateUserInfo();" autocomplete = "off">
+            <form action="/user/edit" id="user-edit-form" method="POST"
+                  onsubmit="return window.validateUserInfo();" autocomplete="off">
                 <input type="hidden" id="uf_id" name="id" value="<%= user._id %>">
                 <!-- Grid row -->
                 <div class="form-row">
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_username">帳號</label>
-                            <input type="text" id="uf_username" class="form-control" value="<%= user.loginID %>"
-                                   name="loginID" readonly>
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_name">使用者名稱<span class="text-danger">*</span></label>
-                            <input type="text" id="uf_name" class="form-control" name="userName"
-                                   value="<%= user.userName %>" required>
-                        </div>
-                    </div>
-                    <!-- Grid column -->
 
-                    <div class="col-md-2">
-                        <!-- Default checked -->
-                        <div class="form-group">
-                            <div class="form-group w-100">
-                                <label for="uf_roles">角色<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="uf_roles" value="<%= roleName %>" readonly required>
-                                <input type="text" class="form-control" id="roles" name ="roles" value="<%= userRoles %>" style='display: none;' readonly required>
+                    <div class="col-md-6" style="text-align: center;">
+                        <img style="border-radius:30px;width:300px;height:300px;" src="/logo.png"/>
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_username">帳號</label>
+                                <input type="text" id="uf_username" class="form-control" value="<%= user.loginID %>"
+                                       name="loginID" readonly>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-md-2">
-                        <br>
-                        <a id="selectRole" class="btn btn-sm btn-info" style="margin-top: 8px; font-size: 16px; height:38px;">
-                            <i aria-hidden="true" class="fa fa-user fa-lg mr-2"></i>選擇角色
-                        </a>
-                    </div>
-
-
-                    <!-- Grid column -->
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_name">使用者名稱<span class="text-danger">*</span></label>
+                                <input type="text" id="uf_name" class="form-control" name="userName"
+                                       value="<%= user.userName %>" required>
+                            </div>
                         </div>
-                    </div>
+                        <!-- Grid column -->
 
-                    <!-- Grid column -->
+                        <div class="col">
+                            <!-- Default checked -->
+                            <div class="form-group">
+                                <div class="form-group w-100">
+                                    <label for="uf_roles">角色<span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="uf_roles" value="<%= roleName %>"
+                                           readonly required>
+                                    <input type="text" class="form-control" id="roles" name="roles"
+                                           value="<%= userRoles %>" style='display: none;' readonly required>
+                                    <a id="selectRole" class="btn btn-sm btn-info"
+                                       style="margin-top: 8px; font-size: 16px; height:38px;">
+                                        <i aria-hidden="true" class="fa fa-user fa-lg mr-2"></i>選擇角色
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="password">密碼</label>
+                                <input id="password" class="form-control" name="password" value=''
+                                       autocomplete="new-password" type="password">
+                            </div>
+                        </div>
+
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="confirm_password">確認密碼</label>
+                                <input id="confirm_password" class="form-control" value='' name="confirm_password"
+                                       autocomplete="new-password" type="password">
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_email">電子信箱</label>
+                                <input type="text" id="uf_email" class="form-control" value="<%= user.email %>"
+                                       name="email">
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_phone">電話</label>
+                                <input type="text" id="uf_phone" class="form-control" name="tel" value="<%= user.tel %>"
+                                       required>
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_job_title">職稱</label>
+                                <input type="text" id="uf_job_title" class="form-control" value="<%= user.title %>"
+                                       name="title">
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_department">部門</label>
+                                <input type="text" id="uf_department" class="form-control" value="<%= user.dept %>"
+                                       name="dept">
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="uf_line">line權杖</label>
+                                <input class="form-control" id="uf_line" name="line_token"
+                                       value="<%= user.line_token %>"
+                                       type="text">
+                            </div>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
                 </div>
-                <!-- Grid row -->
-
-                <!-- Grid row -->
-                <div class="form-row">
-
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="password">密碼</label>
-                            <input id="password" class="form-control" name="password" value='' autocomplete="new-password" type="password">
-                        </div>
-                    </div>
-
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="confirm_password">確認密碼</label>
-                            <input id="confirm_password" class="form-control" value='' name="confirm_password" autocomplete="new-password" type="password">
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-
-
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_email">電子信箱</label>
-                            <input type="text" id="uf_email" class="form-control" value="<%= user.email %>"
-                                   name="email">
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-                </div>
-                <!-- Grid row -->
-
-
-                <!-- Grid row -->
-                <div class="form-row">
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_phone">電話</label>
-                            <input type="text" id="uf_phone" class="form-control" name="tel" value="<%= user.tel %>"
-                                   required>
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_job_title">職稱</label>
-                            <input type="text" id="uf_job_title" class="form-control" value="<%= user.title %>"
-                                   name="title">
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-
-                    <!-- Grid column -->
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_department">部門</label>
-                            <input type="text" id="uf_department" class="form-control" value="<%= user.dept %>"
-                                   name="dept">
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-
-                     <!-- Grid column -->
-                     <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="uf_line">line權杖</label>
-                            <input class="form-control" id="uf_line" name="line_token" value="<%= user.line_token %>"
-                                   type="text">
-                        </div>
-                    </div>
-                    <!-- Grid column -->
-                </div>
-                <!-- Grid row -->
-
 
                 <!-- Grid row -->
                 <div class="form-row text-right">
@@ -170,6 +161,7 @@
                     </div>
                     <!-- Grid column -->
                 </div>
+                <br>
                 <!-- Grid row -->
             </form>
         </div>
