@@ -19,7 +19,7 @@
 
     <main class="container-xl new-bgcolor" role="main">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 new-view-title">
                 <form action="/farm/updateEventA" class="form-horizontal" id="eventForm" method="POST">
                     <div class="row">
                         <div class="col-md-12">
@@ -115,39 +115,6 @@
                         <div class="col-md-12">
                             <fieldset>
                                 <div class="form-group">
-                                <!-- <label for="hard">分娩難易度標記<span class="text-danger">*</span></label>
-                                <div class="row">
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <% if (eventA.hard == "一般牛鳴") { %>
-                                        <input  class="custom-control-input" checked id="normal" name="hard" required type="radio"
-                                                value="一般牛鳴">
-                                        <% } else { %>
-                                        <input  class="custom-control-input" id="normal" name="hard" required type="radio"
-                                                value="一般牛鳴">
-                                        <% } %>
-                                        <label class="custom-control-label" for="abnormal">一般牛鳴</label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <% if (eventA.hard == "自然分娩") { %>
-                                        <input  class="custom-control-input" checked id="birth" name="hard" required type="radio"
-                                                value="自然分娩">
-                                        <% } else { %>
-                                        <input  class="custom-control-input" id="birth" name="hard" required type="radio" value="自然分娩">
-                                        <% } %>
-                                        <label class="custom-control-label" for="abnormal">自然分娩</label>
-                                    </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
-                                        <% if (eventA.hard == "其他分娩") { %>
-                                        <input  class="custom-control-input" checked id="abnormal" name="hard" required type="radio"
-                                                value="其他分娩">
-                                        <% } else { %>
-                                        <input  class="custom-control-input" id="abnormal" name="hard" required type="radio"
-                                                value="其他分娩">
-                                        <% } %>
-                                        <label class="custom-control-label" for="abnormal">其他分娩</label>
-                                    </div>
-                                </div> -->
-
                                     <label for="hard" id="hardTitle">分娩難易度標記<span class="text-danger">*</span></label>
                                     <div class="row">
                                         <div class="col-md-4">
@@ -184,19 +151,7 @@
 
                                         </div>
                                     </div>
-
-                                <!-- <% if (eventA.hard == "順產") { %>
-                            <select class="form-control" id="hard" name="hard" required>
-                                <option selected value="順產" >順產</option>
-                                <option value="異常分娩">異常分娩</option>
-                            </select>
-                            <% } else { %>
-                                <select class="form-control" id="hard" name="hard" required>
-                                    <option value="順產">順產</option>
-                                    <option selected value="異常分娩">異常分娩</option>
-                                </select>
-                            <% }%> -->
-                                </div>.
+                                </div>
                             </fieldset>
                         </div>
 
@@ -220,7 +175,7 @@
                             <a class="btn btn-danger btn-md" href="/farm">取消</a>
                         </div>
                         <!-- Grid column -->
-                    </div>
+                    </div><BR>
 
                     <input id="id" name="id" type="hidden" value="<%= eventA.id %>">
                 </form> <!-- /form-->

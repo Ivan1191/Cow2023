@@ -35,3 +35,7 @@
     - route 管理
     - 頁面管理
     - models 管理
+
+# 如果卡住的話透過以下方法關閉端口
+netstat -ano | findstr :3000
+taskkill typeyourPIDhere 
