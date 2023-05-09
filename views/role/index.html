@@ -55,25 +55,23 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group">
-                        <label for="role">角色名稱</label>
-                        <input class="form-control" id="name" type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Slug</label>
-                        <input class="form-control" id="rolerole" type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="allows">擁有權限</label>
-                        <div class="form-group" id='optList'>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="role">角色名稱</label>
+                            <input class="form-control" id="name" type="text">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="role">Slug</label>
+                            <input class="form-control" id="rolerole" type="text">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="allows">擁有權限</label>
+                            <div class="form-group" id='optList'>
+                            </div>
                         </div>
                     </div>
-
-
                 </form>
             </div>
-
-
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="button">關閉</button>
                 <button class="btn btn-primary" id="create" type="button">創建</button>
@@ -94,24 +92,27 @@
             </div>
             <div class="modal-body">
                 <form>
-                    <div class="form-group" style='display: none;'>
-                        <label for="_id">_id</label>
-                        <input class="form-control" id="edit_id" readonly type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="role">角色名稱</label>
-                        <input class="form-control" id="editName" type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Slug</label>
-                        <input class="form-control" id="editRoleRole" readonly type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="allows">擁有權限</label>
-                        <div class="form-group" id='editOptList'>
+                    <div class="row">
+                        <div class="form-group" style='display: none;'>
+                            <label for="_id">_id</label>
+                            <input class="form-control" id="edit_id" readonly type="text">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="role">角色名稱</label>
+                            <input class="form-control" id="editName" type="text">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="role">Slug</label>
+                            <input class="form-control" id="editRoleRole" readonly type="text">
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="allows">擁有權限</label>
+                            <div class="form-group" id='editOptList'>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

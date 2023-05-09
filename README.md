@@ -38,4 +38,4 @@
 
 # 如果卡住的話透過以下方法關閉端口
 netstat -ano | findstr :3000
-taskkill typeyourPIDhere 
+tskill PID
