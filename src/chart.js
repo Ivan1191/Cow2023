@@ -96,6 +96,8 @@ $(document).ready(function () {
         }
         ;
 
+
+        $('#graph-container').show();
         // window.datekey = [];
         // window.datevalue = [];
 
