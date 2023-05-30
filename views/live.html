@@ -29,9 +29,10 @@
 
             <div class="show">
                 <div id="show01" >
-                <canvas id="video-canvas1"></canvas>
+                <canvas id="video-canvas1" width="300" height="300"></canvas>
                 <script type="text/javascript">
-                    var url = 'ws:///cow2020.ddns.net:3333';
+                    // var url = 'ws://cow2020.ddns.net:3333';
+                    var url = 'ws://127.0.0.1:3333';
                     var canvas = document.getElementById('video-canvas1');
                     var player = new JSMpeg.Player(url,{
                                                         canvas: canvas,
@@ -39,11 +40,11 @@
                                                     });
                 </script>
                 </div>
-
                 <div id="show02" >
-                <canvas id="video-canvas2"></canvas>
+                <canvas id="video-canvas2" width="300" height="300"></canvas>
                 <script type="text/javascript">
-                    var url = 'ws://cow2020.ddns.net:4444';
+                    // var url = 'ws://cow2020.ddns.net:4444';
+                    var url = 'ws://127.0.0.1:4444';
                     var canvas = document.getElementById('video-canvas2');
                     var player = new JSMpeg.Player(url,{
                                                         canvas: canvas,
@@ -51,7 +52,6 @@
                                                     });
                 </script>
                 </div>
-
             </div>
         </div>
     </main>
