@@ -3,6 +3,7 @@ var fs = require('fs');
 var grid = require('gridfs-stream');
 var async = require('async');
 const audioTen = require('../models/audioTen');
+const camerafield = require('../models/camerafield');
 var gap = 2000;
 var auth = require('../auth');
 var moment = require('moment-timezone');
@@ -13,16 +14,44 @@ var uuid = require('uuid');
 
 module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB, AudioRaw, AudioTen, Role, Permission, htA, htB) {
 
+    //if db don't have role table yet, then please restart server
+    function setSeedcamerafield() {
+        camerafield.find({}, '-_id -__v -name', function (err, db) {
+            console.log("Initializing db camerafield table.")
+            if (err) {
+                console.error(err);
+            } else if (!db.length) {
+                var dataArray = [
+                    ['第一台', 'streamName1', 'rtsp://admin:admin@192.168.12.61:55461', '3333'],
+                    ['第二台', 'streamName2', 'rtsp://admin:admin@192.168.12.62:55462', '4444']
+                ];
+                dataArray.forEach(function (current) {
+                    console.log(current,"||||");
+                    var db = new camerafield();
+
+                    console.log(db,"==========");
+
+                    db.title = current[0];
+                    db.name = current[1];
+                    db.streamUrl = current[2];
+                    db.wsPort = current[3];
+                    db.save();
+                })
+                console.log("Please restart the server.")
+            }
+        });
+    }
+    setSeedcamerafield();
 
     //add default admin
     var newuser = new User();
-    newuser.userName = '管理員'
-    newuser.loginID = 'admin'
-    newuser.email = 'admin@admin.com'
-    newuser.tel = '00000000000'
-    newuser.title = 'Manage'
-    newuser.dept = 'Manage'
-    newuser.roles = ['Admin']
+    newuser.userName = '管理員';
+    newuser.loginID = 'admin';
+    newuser.email = 'admin@admin.com';
+    newuser.tel = '00000000000';
+    newuser.title = 'Manage';
+    newuser.dept = 'Manage';
+    newuser.roles = ['Admin'];
 
     User.findOne({
         loginID: 'admin'
@@ -142,6 +171,8 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
         });
     }
     setSeedRole();
+
+
 
     ///////////////////
     //USER MANAGEMENT//

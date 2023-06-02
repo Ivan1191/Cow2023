@@ -10,6 +10,10 @@
     <link rel="icon" href="../../favicon.ico">
 
     <title><%= title %></title>
+    <script
+            src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+            crossorigin="anonymous"></script>>
     <script src="/build/live.bundle.js"></script>
     <script src="https://jsmpeg.com/jsmpeg.min.js"></script>
 </head>
@@ -20,16 +24,16 @@
     <main role="main" class="container-fluid new-bgcolor new-view-title">
         <div>
             <div style="display:flex; width: 100%; justify-content:center;">
-                <select class="selectpicker" style="margin-right: 0.5rem">
+                <select id="camerafieldsSelect" class="selectpicker" style="margin-right: 0.5rem">
                     <option value="0" selected>----請選擇----</option>
                     <option value="21">192.168.11.21</option>
                     <option value="22">192.168.11.22</option>
                 </select>
             </div>
 
-            <div class="show">
+            <div class="show" id="showarea">
                 <div id="show01" >
-                <canvas id="video-canvas1" width="300" height="300"></canvas>
+                <canvas id="video-canvas1" style="width: 640px; height: 480px"></canvas>
                 <script type="text/javascript">
                     // var url = 'ws://cow2020.ddns.net:3333';
                     var url = 'ws://127.0.0.1:3333';
@@ -41,7 +45,7 @@
                 </script>
                 </div>
                 <div id="show02" >
-                <canvas id="video-canvas2" width="300" height="300"></canvas>
+                <canvas id="video-canvas2" style="width: 640px; height: 480px"></canvas>
                 <script type="text/javascript">
                     // var url = 'ws://cow2020.ddns.net:4444';
                     var url = 'ws://127.0.0.1:4444';
@@ -55,6 +59,12 @@
             </div>
         </div>
     </main>
-</body>
+<script>
+    $('#camerafieldsSelect').on("change", function (ret) {
+        console.log(ret, "|||||||||||||||||");
+    });
 
+    // $('#showarea')
+</script>
+</body>
 </html>
