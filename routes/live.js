@@ -12,27 +12,27 @@ module.exports = router;
 const Stream = require('node-rtsp-stream');
 const {scheduleJob} = require('node-schedule');
 
-// camerafield.find({}, function (err, rows) {
-//     // console.log(rows, "||||||||||");
-//     var i = 0;
-//     rows.forEach(function (row) {
-//         var options = {
-//             name: row.name,
-//             streamUrl: row.streamUrl,
-//             wsPort: row.wsPort,
-//             ffmpegOptions: {
-//                 '-stats': '',
-//                 '-rtsp_transport': 'tcp',
-//                 '-initial_pause': 1,
-//                 '-r': 30,
-//                 '-loglevel': 'error',
-//             }
-//         };
-//         stream = new Stream(options);
-//         // console.log(stream,"|||||||||||");
-//         i++;
-//     })
-// });
+camerafield.find({}, function (err, rows) {
+    // console.log(rows, "||||||||||");
+    var i = 0;
+    rows.forEach(function (row) {
+        var options = {
+            name: row.name,
+            streamUrl: row.streamUrl,
+            wsPort: row.wsPort,
+            ffmpegOptions: {
+                '-stats': '',
+                '-rtsp_transport': 'tcp',
+                '-initial_pause': 1,
+                '-r': 30,
+                '-loglevel': 'error',
+            }
+        };
+        stream = new Stream(options);
+        // console.log(stream,"|||||||||||");
+        i++;
+    })
+});
 
 // 以下為舊版方式 2023/06/02 保留用作參考。
 // const options = {
@@ -132,7 +132,7 @@ router.post('/camerafieldsSelect', function (req, res) {
         res.status(201).json({
             result: 1,
             message: 'get camerafieldsSelect successfully',
-            row: rows,
+            rows: rows,
         });
     });
 });

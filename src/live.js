@@ -18,9 +18,7 @@ import GHelper from 'ghelper.js';
 
 $(document).ready(function () {
 
-    // var select = $('#camerafieldsSelect');
-    // $('option', select).remove();
-
+    //從資料庫取資料並渲染攝影機參數以及下拉選單
     $.ajax({
         url: "/live/camerafieldsSelect",
         type: "POST",
@@ -28,34 +26,38 @@ $(document).ready(function () {
             console.log(data);
             var select = $('#camerafieldsSelect');
             $('option', select).remove();
-            data.row.forEach(function (row) {
-                var option = new Option(row.name, row.wsPort);
+            select.append(new Option("----請選擇----", ""));
+            data.rows.forEach(function (row) {
+                var option = new Option(row.title, row.wsPort);
                 select.append($(option));
             })
+
+            var html = "";
+            $("#camerafieldsSelect > option").each(function () {
+                // console.log(this.text + " : " + this.value);
+                if(this.value!=''){
+                    html += "<div class='show' id='show-" + this.value + "'>";
+                    html += "<canvas id='video-canvas-" + this.value + "' style='width:640px;height:480px'></canvas>";
+                    html += "<script type='text/javascript'>";
+                    html += "var url = 'ws://127.0.0.1:" + this.value + "'; var canvas = document.getElementById('video-canvas-" + this.value + "');";
+                    html += "var player = new JSMpeg.Player(url, {canvas: canvas, audio: true});";
+                    html += "<";
+                    html += "/script></div>";
+                }
+            });
+
+            $('#showarea').html(html);
+            $('.show').hide();
         },
         error: (data) => {
             // $("#alert-box").show();
         }
     });
 
-    $('#camerafieldsSelect').on("change", function (ret) {
-        console.log(ret, "|||||||||||||||||");
+    //處理顯示哪個畫面
+    $('#camerafieldsSelect').on("change", function () {
+        $('.show').hide();
+        $('#show-' + this.value).show();
     });
 
-    $('#showarea')
-
-    // window.choose = '0';
-    // $('#show01').hide();
-    // $('#show02').hide();
-    // document.getElementsByTagName('select')[0].onchange = function () {
-    //     var index = this.selectedIndex;
-    //     choose = this.children[index].value;
-    //     if (choose == '21') {
-    //         $('#show01').show();
-    //         $('#show02').hide();
-    //     } else if(choose == '22'){
-    //         $('#show02').show();
-    //         $('#show01').hide();
-    //     }
-    // }
 });

@@ -13,58 +13,40 @@
     <script
             src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-            crossorigin="anonymous"></script>>
+            crossorigin="anonymous"></script>
     <script src="/build/live.bundle.js"></script>
     <script src="https://jsmpeg.com/jsmpeg.min.js"></script>
 </head>
 
 <body>
-    <% include ./layout/header.html %>
-    <canvas  width="200" height="70"></canvas>
-    <main role="main" class="container-fluid new-bgcolor new-view-title">
-        <div>
-            <div style="display:flex; width: 100%; justify-content:center;">
-                <select id="camerafieldsSelect" class="selectpicker" style="margin-right: 0.5rem">
-                    <option value="0" selected>----請選擇----</option>
-                    <option value="21">192.168.11.21</option>
-                    <option value="22">192.168.11.22</option>
-                </select>
-            </div>
-
-            <div class="show" id="showarea">
-                <div id="show01" >
-                <canvas id="video-canvas1" style="width: 640px; height: 480px"></canvas>
-                <script type="text/javascript">
-                    // var url = 'ws://cow2020.ddns.net:3333';
-                    var url = 'ws://127.0.0.1:3333';
-                    var canvas = document.getElementById('video-canvas1');
-                    var player = new JSMpeg.Player(url,{
-                                                        canvas: canvas,
-                                                        audio: true
-                                                    });
-                </script>
-                </div>
-                <div id="show02" >
-                <canvas id="video-canvas2" style="width: 640px; height: 480px"></canvas>
-                <script type="text/javascript">
-                    // var url = 'ws://cow2020.ddns.net:4444';
-                    var url = 'ws://127.0.0.1:4444';
-                    var canvas = document.getElementById('video-canvas2');
-                    var player = new JSMpeg.Player(url,{
-                                                        canvas: canvas,
-                                                        audio: true
-                                                    });
-                </script>
-                </div>
-            </div>
+<% include ./layout/header.html %>
+<div class="row new-view-title">
+    <div class="col-md-12">
+        <div class="form-group">
+            <h3><strong>即時預覽畫面</strong></h3>
         </div>
-    </main>
-<script>
-    $('#camerafieldsSelect').on("change", function (ret) {
-        console.log(ret, "|||||||||||||||||");
-    });
+    </div>
+</div>
+<main role="main" class="container-fluid new-bgcolor new-view-title">
+    <div>
+        <div style="display:flex; width: 100%; justify-content:center;">
+            <select id="camerafieldsSelect" class="selectpicker" style="margin-right: 0.5rem">
+                <option value="3333">AAAA</option>
+                <option value="4444">BBBB</option>
+            </select>
+        </div>
+        <div style="height: 60px;">
 
-    // $('#showarea')
+        </div>
+        <div id="showarea">
+        </div>
+        <div style="height: 60px;">
+
+        </div>
+    </div>
+</main>
+<script>
+
 </script>
 </body>
 </html>
