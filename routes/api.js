@@ -4,6 +4,7 @@ var grid = require('gridfs-stream');
 var async = require('async');
 const audioTen = require('../models/audioTen');
 const camerafield = require('../models/camerafield');
+const htManage = require('../models/htManage');
 var gap = 2000;
 var auth = require('../auth');
 var moment = require('moment-timezone');
@@ -14,7 +15,7 @@ var uuid = require('uuid');
 
 module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB, AudioRaw, AudioTen, Role, Permission, htA, htB) {
 
-    //if db don't have role table yet, then please restart server
+    //建 camerafield 測試資料
     function setSeedcamerafield() {
         camerafield.find({}, '-_id -__v -name', function (err, db) {
             console.log("Initializing db camerafield table.")
@@ -42,6 +43,35 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
         });
     }
     setSeedcamerafield();
+
+    //建 htManage 測試資料
+    function sethtManage() {
+        htManage.find({}, '-_id -__v -name', function (err, db) {
+            console.log("Initializing db htManage table.");
+            if (err) {
+                console.error(err);
+            } else if (!db.length) {
+                var dataArray = [
+                    ['分娩舍-溫溼度感測1', '24C', '55%'],
+                    ['分娩舍-溫溼度感測2', '24C', '55%'],
+                    ['分娩舍-溫溼度感測3', '24C', '55%'],
+                    ['分娩舍-溫溼度感測4', '24C', '55%']
+                ];
+                dataArray.forEach(function (current) {
+                    console.log(current,"||||");
+                    var db = new htManage();
+                    console.log(db,"==========");
+
+                    db.name = current[0];
+                    db.temperature = current[1];
+                    db.humidity = current[2];
+                    db.save();
+                })
+                console.log("Please restart the server.")
+            }
+        });
+    }
+    sethtManage();
 
     //add default admin
     var newuser = new User();

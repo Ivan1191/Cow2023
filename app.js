@@ -177,7 +177,8 @@ var specialsound = require('./models/specialsound');
 var permission = require('./models/permission');
 var audioClassManage = require('./models/audioClassManage');
 var camerafield = require('./models/camerafield');
-var apiRoutes = require('./routes/api')(app, mongoose, conn, user, workspace, eventA, eventB, audioRaw, audioTen, role, permission, htA, htB, alarmrecord, thermal, specialsound, audioClassManage, camerafield);
+var htManage = require('./models/htManage');
+var apiRoutes = require('./routes/api')(app, mongoose, conn, user, workspace, eventA, eventB, audioRaw, audioTen, role, permission, htA, htB, alarmrecord, thermal, specialsound, audioClassManage, camerafield, htManage);
 
 // Check add file per times
 var rule = new schedule.RecurrenceRule();
