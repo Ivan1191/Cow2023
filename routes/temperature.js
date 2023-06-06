@@ -4,7 +4,8 @@ var auth = require('../auth');
 var htA = require('../models/htA')
 var htB = require('../models/htB')
 var htC = require('../models/htC')
-var htD = require('../models/htD');
+var htD = require('../models/htD')
+var htManage = require('../models/htManage');
 var isLoggedIn = true;
 var moment = require('moment');
 
@@ -287,203 +288,259 @@ router.post('/getD/humidity', function (req, res, next) {
 });
 
 router.post('/getTH', function (req, res, next) {
-    // console.log(req.body);
+    console.log(req.body);
     if (req.body.type == 'line') {
-        switch (req.body.sensorID) {
-            case 'A':
-                // console.log('A');
-                htA.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htAs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        formatLineAll(htAs).then((datas) => {
-                            res.send(datas);
-                        });
-                    }
+        htManage.find({
+            sensorID: req.body.sensorID,
+            create_at: {
+                // $gte: new Date(req.body.starttime),
+                // $lte: new Date(req.body.endtime)
+                $gte: req.body.starttime,
+                $lte: req.body.endtime
+            }
+        }, '-_id create_at temperature humidity', {
+            sort: {
+                create_at: 1
+            }
+        }, function (err, htAs) {
+            if (err) {
+                console.error(err);
+            } else {
+                formatLineAll(htAs).then((datas) => {
+                    res.send(datas);
                 });
-                break;
-            case 'B':
-                // console.log('B');
-                htB.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htBs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        formatLineAll(htBs).then((datas) => {
-                            res.send(datas);
-                        });
-                    }
-                });
-                break;
-            case 'C':
-                // console.log('C');
-                htC.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htCs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        formatLineAll(htCs).then((datas) => {
-                            res.send(datas);
-                        });
-                    }
-                });
-                break;
-            case 'D':
-                // console.log('D');
-                htD.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htDs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        formatLineAll(htDs).then((datas) => {
-                            res.send(datas);
-                        });
-                    }
-                });
-                break;
-            default:
-                // console.log('[ERROR] No such sensorID!');
-        }
+            }
+        });
+
+        // switch (req.body.sensorID) {
+        //     case 'A':
+        //         // console.log('A');
+        //         htA.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htAs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 formatLineAll(htAs).then((datas) => {
+        //                     res.send(datas);
+        //                 });
+        //             }
+        //         });
+        //         break;
+        //     case 'B':
+        //         // console.log('B');
+        //         htB.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htBs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 formatLineAll(htBs).then((datas) => {
+        //                     res.send(datas);
+        //                 });
+        //             }
+        //         });
+        //         break;
+        //     case 'C':
+        //         // console.log('C');
+        //         htC.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htCs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 formatLineAll(htCs).then((datas) => {
+        //                     res.send(datas);
+        //                 });
+        //             }
+        //         });
+        //         break;
+        //     case 'D':
+        //         // console.log('D');
+        //         htD.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htDs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 formatLineAll(htDs).then((datas) => {
+        //                     res.send(datas);
+        //                 });
+        //             }
+        //         });
+        //         break;
+        //     default:
+        // console.log('[ERROR] No such sensorID!');
+        // }
     } else {
         // console.log("其他的");
-        switch (req.body.sensorID) {
-            case 'A':
-                // console.log('A');
-                htA.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htAs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        // formatLineAll(htAs).then((datas) => {
-                        res.send(htAs);
-                        // });
-                    }
-                });
-                break;
-            case 'B':
-                // console.log('B');
-                htB.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htBs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        // formatLineAll(htBs).then((datas) => {
-                        res.send(htBs);
-                        // });
-                    }
-                });
-                break;
-            case 'C':
-                // console.log('C');
-                htC.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htCs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        // formatLineAll(htCs).then((datas) => {
-                        res.send(htCs);
-                        // });
-                    }
-                });
-                break;
-            case 'D':
-                // console.log('D');
-                htD.find({
-                    create_at: {
-                        // $gte: new Date(req.body.starttime),
-                        // $lte: new Date(req.body.endtime)
-                        $gte: req.body.starttime,
-                        $lte: req.body.endtime
-                    }
-                }, '-_id create_at temperature humidity', {
-                    sort: {
-                        create_at: 1
-                    }
-                }, function (err, htDs) {
-                    if (err) {
-                        console.error(err);
-                    } else {
-                        // formatLineAll(htDs).then((datas) => {
-                        res.send(htDs);
-                        // });
-                    }
-                });
-                break;
-            default:
-                // console.log('[ERROR] No such sensorID!');
-        }
+
+        htManage.find({
+            sensorID: req.body.sensorID,
+            create_at: {
+                $gte: req.body.starttime,
+                $lte: req.body.endtime
+            }
+        }, '-_id create_at temperature humidity', {
+            sort: {
+                create_at: 1
+            }
+        }, function (err, htAs) {
+            if (err) {
+                console.error(err);
+            } else {
+                res.send(htAs);
+            }
+        });
+
+        // switch (req.body.sensorID) {
+        //     case 'A':
+        //         // console.log('A');
+        //         htA.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htAs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 // formatLineAll(htAs).then((datas) => {
+        //                 res.send(htAs);
+        //                 // });
+        //             }
+        //         });
+        //         break;
+        //     case 'B':
+        //         // console.log('B');
+        //         htB.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htBs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 // formatLineAll(htBs).then((datas) => {
+        //                 res.send(htBs);
+        //                 // });
+        //             }
+        //         });
+        //         break;
+        //     case 'C':
+        //         // console.log('C');
+        //         htC.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htCs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 // formatLineAll(htCs).then((datas) => {
+        //                 res.send(htCs);
+        //                 // });
+        //             }
+        //         });
+        //         break;
+        //     case 'D':
+        //         // console.log('D');
+        //         htD.find({
+        //             create_at: {
+        //                 // $gte: new Date(req.body.starttime),
+        //                 // $lte: new Date(req.body.endtime)
+        //                 $gte: req.body.starttime,
+        //                 $lte: req.body.endtime
+        //             }
+        //         }, '-_id create_at temperature humidity', {
+        //             sort: {
+        //                 create_at: 1
+        //             }
+        //         }, function (err, htDs) {
+        //             if (err) {
+        //                 console.error(err);
+        //             } else {
+        //                 // formatLineAll(htDs).then((datas) => {
+        //                 res.send(htDs);
+        //                 // });
+        //             }
+        //         });
+        //         break;
+        //     default:
+        // console.log('[ERROR] No such sensorID!');
+        // }
     }
 
 });
+
+router.post('/htManageView', function (req, res) {
+    htManage.aggregate([
+        {$group: {_id: {sensorID: "$sensorID", name: "$name"}}},
+        {$sort: {"_id.sensorID": 1}}
+    ], function (err, rows) {
+        res.status(201).json({
+            result: 1,
+            message: 'get htManageView successfully',
+            rows: rows,
+        });
+    });
+});
+
+
 module.exports = router;

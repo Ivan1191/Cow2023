@@ -17,47 +17,83 @@ var reloadInterval = 5;
 
 var moment = require('moment-timezone');
 moment.tz.setDefault("Asia/Taipei");
-var lastChart = {
-    'A': null,
-    'B': null,
-    'C': null,
-    'D': null,
-};
 
-var tables = {
-    'A': null,
-    'B': null,
-    'C': null,
-    'D': null,
-};
+var lastChart = {};
+var tables = {};
 
+var now_data = [];
 $(document).ready(function () {
     window.datakeys = [];
     window.datavaluesT = [];
     window.datavaluesH = [];
     window.type = 'line';
     window.duration = '1';
-    getTable('A');
-    getTable('B');
-    getTable('C');
-    getTable('D');
-    $('#line').show();
-    $('#table').hide();
-    getLineChart('A');
-    getLineChart('B');
-    getLineChart('C');
-    getLineChart('D');
+
+    $.ajax({
+        url: "/temperature/htManageView",
+        type: "POST",
+        success: (data) => {
+            now_data = data;
+            console.log(data.rows);
+
+            var line_html = "";
+            var table_html = "";
+
+            data.rows.forEach(function (rows) {
+                var row = rows._id;
+
+                lastChart[row.sensorID] = null;
+                tables[row.sensorID] = null;
+
+                line_html += "<div id='graph-container" + row.sensorID + "' class='container col-md-6'>";
+                line_html += "<div><h3 style='width: 100%; text-align: center;'><strong>" + row.name + "</strong></h3></div>";
+                line_html += "<canvas id='lineChart" + row.sensorID + "'></canvas></div>";
+
+                table_html += "<div class='table-responsive col-md-6'>";
+                table_html += "<table id='table" + row.sensorID + "' class='table table-striped table-bordered new-table-bgcolor' style='width: 100%'>";
+                table_html += "<thead><div><h3><strong>" + row.name + "</strong></h3></div>";
+                table_html += "<tr><th>時間</th><th>溫度</th><th>濕度</th></tr>";
+                table_html += "</thead></table></div>";
+
+            })
+
+            $('#line').html(line_html);
+            $('#table').html(table_html);
+
+            data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                getTable(row.sensorID);
+            });
+
+            $('#line').show();
+            $('#table').hide();
+
+            data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                getLineChart(row.sensorID);
+            });
+
+        },
+        error: (data) => {
+            // $("#alert-box").show();
+        }
+    });
+
+    console.log(now_data,"||||||now_data|||||");
+
+
+
     setInterval(function () {
         if (type == 'line') {
-            getLineChart('A');
-            getLineChart('B');
-            getLineChart('C');
-            getLineChart('D');
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                getLineChart(row.sensorID);
+            });
         } else {
-            tables['A'].ajax.reload(null, false);
-            tables['B'].ajax.reload(null, false);
-            tables['C'].ajax.reload(null, false);
-            tables['D'].ajax.reload(null, false);
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                tables[row.sensorID].ajax.reload(null, false);
+            });
         }
     }, reloadInterval * 60 * 1000);
 
@@ -70,17 +106,17 @@ $(document).ready(function () {
             $('#line').show();
             $('#table').hide();
             // console.log("現在是" + type)
-            getLineChart('A');
-            getLineChart('B');
-            getLineChart('C');
-            getLineChart('D');
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                getLineChart(row.sensorID);
+            });
         } else {
             $('#line').hide();
             $('#table').show();
-            tables['A'].ajax.reload(null, false);
-            tables['B'].ajax.reload(null, false);
-            tables['C'].ajax.reload(null, false);
-            tables['D'].ajax.reload(null, false);
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                tables[row.sensorID].ajax.reload(null, false);
+            });
             // console.log("現在是" + type)
         }
     }
@@ -93,17 +129,17 @@ $(document).ready(function () {
             $('#line').show();
             $('#table').hide();
             // console.log("現在是" + duration);
-            getLineChart('A');
-            getLineChart('B');
-            getLineChart('C');
-            getLineChart('D');
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                getLineChart(row.sensorID);
+            });
         } else {
             $('#line').hide();
             $('#table').show();
-            tables['A'].ajax.reload(null, false);
-            tables['B'].ajax.reload(null, false);
-            tables['C'].ajax.reload(null, false);
-            tables['D'].ajax.reload(null, false);
+            now_data.rows.forEach(function (fun_rows) {
+                var row = fun_rows._id;
+                tables[row.sensorID].ajax.reload(null, false);
+            });
             // console.log("現在是" + duration);
         }
     }
@@ -125,7 +161,8 @@ $(document).ready(function () {
                 setdata(data);
                 updateLineChart(timeData['sensorID'])
             },
-            error: (data) => {}
+            error: (data) => {
+            }
         });
         // console.log(datavalues)
     };
@@ -152,11 +189,11 @@ $(document).ready(function () {
                 }
             },
             columns: [{
-                    data: "create_at",
-                    render: function (data, type, row, meta) {
-                        return moment(data).subtract(8, 'hours').format("YYYY-MM-DD HH:mm:ss");
-                    }
-                },
+                data: "create_at",
+                render: function (data, type, row, meta) {
+                    return moment(data).subtract(8, 'hours').format("YYYY-MM-DD HH:mm:ss");
+                }
+            },
                 {
                     data: "temperature",
                 },
@@ -224,7 +261,7 @@ $(document).ready(function () {
                         fill: false,
                         lineTension: 0,
                         yAxisID: 'humid',
-                    }, ]
+                    },]
                 },
                 options: {
                     line: {
@@ -242,7 +279,7 @@ $(document).ready(function () {
                                 max: 50,
                                 min: 0
                             }
-                          }, {
+                        }, {
                             id: 'humid',
                             type: 'linear',
                             position: 'right',
@@ -250,7 +287,7 @@ $(document).ready(function () {
                                 max: 100,
                                 min: 0
                             }
-                          }]
+                        }]
                     },
                     spanGaps: true,
                     responsive: true,
@@ -281,7 +318,7 @@ $(document).ready(function () {
                         fill: false,
                         lineTension: 0,
                         yAxisID: 'humid',
-                    }, ]
+                    },]
                 },
                 options: {
                     line: {
@@ -299,7 +336,7 @@ $(document).ready(function () {
                                 max: 50,
                                 min: 0
                             }
-                          }, {
+                        }, {
                             id: 'humid',
                             type: 'linear',
                             position: 'right',
@@ -307,7 +344,7 @@ $(document).ready(function () {
                                 max: 100,
                                 min: 0
                             }
-                          }]
+                        }]
                     },
                     spanGaps: true,
                     responsive: true,
@@ -318,37 +355,41 @@ $(document).ready(function () {
 
 });
 
-setInterval( function() {
-    reminder()        
-},5000)
+setInterval(function () {
+    reminder()
+}, 5000)
 
-function reminder(){
+function reminder() {
     $.ajax({
-        url:'/alarmrecord/thermal_reminder',
-        method:'POST',
-        data:function () {
-        },    
-        success:function(res){
-            if(res){
+        url: '/alarmrecord/thermal_reminder',
+        method: 'POST',
+        data: function () {
+        },
+        success: function (res) {
+            if (res) {
                 // console.log("thermal")
-                document.getElementById("light").src="/red.png"
-            }else{
-                document.getElementById("light").src="/blue.png"
+                document.getElementById("light").src = "/red.png"
+            } else {
+                document.getElementById("light").src = "/blue.png"
             }
         },
-        error:function(err){console.log('thermal_reminder_err')},
+        error: function (err) {
+            console.log('thermal_reminder_err')
+        },
     });
     $.ajax({
-        url:'/alarmrecord/specialsound_reminder',
-        method:'POST',
-        data:function () {
-        },    
-        success:function(res){
-            if(res){
+        url: '/alarmrecord/specialsound_reminder',
+        method: 'POST',
+        data: function () {
+        },
+        success: function (res) {
+            if (res) {
                 // console.log("special")
                 alert('牛隻叫聲異常');
             }
         },
-        error:function(err){console.log('specialsound_reminder_err')},
+        error: function (err) {
+            console.log('specialsound_reminder_err')
+        },
     });
 }

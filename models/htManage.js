@@ -6,6 +6,10 @@ var htManageSchema = new Schema({
         type: String,
         default: ""
     },
+    sensorID: {
+        type: String,
+        default: ""
+    },
     temperature: {
         type: String,
         default: ""

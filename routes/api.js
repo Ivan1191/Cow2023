@@ -52,10 +52,10 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
                 console.error(err);
             } else if (!db.length) {
                 var dataArray = [
-                    ['分娩舍-溫溼度感測1', '24C', '55%'],
-                    ['分娩舍-溫溼度感測2', '24C', '55%'],
-                    ['分娩舍-溫溼度感測3', '24C', '55%'],
-                    ['分娩舍-溫溼度感測4', '24C', '55%']
+                    ['分娩舍-溫溼度感測1', 'A', '24C', '55%'],
+                    ['分娩舍-溫溼度感測2', 'B', '24C', '55%'],
+                    ['分娩舍-溫溼度感測3', 'C', '24C', '55%'],
+                    ['分娩舍-溫溼度感測4', 'D', '24C', '55%']
                 ];
                 dataArray.forEach(function (current) {
                     console.log(current,"||||");
@@ -63,8 +63,9 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
                     console.log(db,"==========");
 
                     db.name = current[0];
-                    db.temperature = current[1];
-                    db.humidity = current[2];
+                    db.sensorID = current[1];
+                    db.temperature = current[2];
+                    db.humidity = current[3];
                     db.save();
                 })
                 console.log("Please restart the server.")
