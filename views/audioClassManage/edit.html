@@ -34,6 +34,8 @@
 
                         <input class="form-control" id="tmpName" name="tmpName" readonly type="text"
                             value="<%= datarow.Name %>">
+                        <input class="form-control" id="tmpMicId" name="tmpMicId" readonly type="text"
+                               value="<%= datarow.MicId %>">
                         <input class="form-control" id="tmpfilePath" name="tmpfilePath" readonly type="text"
                             value="<%= datarow.filePath %>">
 
@@ -49,6 +51,14 @@
                             <div class="form-group">
                                 <label for="Name" id="Name_Title">名稱<span class="text-danger">*</span></label>
                                 <input class="form-control" id="Name" name="Name"   value="<%= datarow.Name %>" required type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="MicId" id="MicId_Title">麥克風編號<span class="text-danger">*</span></label>
+                                <input class="form-control" id="MicId" name="MicId" value="<%= datarow.MicId %>" required type="text">
                             </div>
                         </div>
                     </div>

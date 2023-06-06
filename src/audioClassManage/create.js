@@ -39,6 +39,7 @@ $(document).ready(function () {
 
     $('#reset').click(function (evt) {
         $('#Name').val('');
+        $('#MicId').val('');
         $('#filePath').val('');
     });
 

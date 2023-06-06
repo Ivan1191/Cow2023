@@ -44,6 +44,9 @@ $(document).ready(function () {
                 data: "Name",
             },
             {
+                data: "MicId",
+            },
+            {
                 data: "filePath",
             },
             {

@@ -78,6 +78,7 @@ router.get('/edit', function (req, res, next) {
             var eventAObj = {
                 id: eventA._id,
                 Name: eventA.Name,
+                MicId: eventA.MicId,
                 filePath: eventA.filePath,
             };
             // console.log(eventAObj);
@@ -101,6 +102,7 @@ router.post('/createEventA', function (req, res) {
     var db = new audioClassManage();
 
     db.Name = req.body["Name"];
+    db.MicId = req.body["MicId"];
     db.filePath = req.body["filePath"];
 
     db.save(function (err) {
@@ -123,6 +125,7 @@ router.post('/updateEventA', function (req, res) {
 
     audioClassManage.findByIdAndUpdate(req.body.id, {
         Name: req.body.Name,
+        MicId: req.body.MicId,
         filePath: req.body.filePath
     }, function (err) {
         if (err) {

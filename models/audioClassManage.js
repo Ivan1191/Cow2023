@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var audioClassManageSchema = new Schema({
     Name: String,
+    MicId: String,
     filePath: String,
 });
 

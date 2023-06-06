@@ -21,6 +21,7 @@ $(document).ready(function () {
 
     $('#reset').click(function (evt) {
         $('#Name').val($('#tmpName').val());
+        $('#MicId').val($('#tmpMicId').val());
         $('#filePath').val($('#tmpfilePath').val());
     });
 
