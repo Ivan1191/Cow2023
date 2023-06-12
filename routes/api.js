@@ -5,6 +5,7 @@ var async = require('async');
 const audioTen = require('../models/audioTen');
 const camerafield = require('../models/camerafield');
 const htManage = require('../models/htManage');
+const audioClassManage = require('../models/audioClassManage');
 var gap = 2000;
 var auth = require('../auth');
 var moment = require('moment-timezone');
@@ -14,6 +15,34 @@ var sha256 = require('js-sha256');
 var uuid = require('uuid');
 
 module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB, AudioRaw, AudioTen, Role, Permission, htA, htB) {
+
+    //建 audioClassManage 測試資料
+    function setSeedaudioClassManage() {
+        audioClassManage.find({}, '-_id -__v -Name', function (err, db) {
+            console.log("Initializing db audioClassManage table.")
+            if (err) {
+                console.error(err);
+            } else if (!db.length) {
+                var dataArray = [
+                    ['牛隻1', 'a', 'D:/test/wave/cow-mic1'],
+                    ['牛隻2', 'c', 'D:/test/wave/cow-mic3']
+                ];
+                dataArray.forEach(function (current) {
+                    console.log(current,"||||");
+                    var db = new audioClassManage();
+
+                    console.log(db,"==========");
+
+                    db.Name = current[0];
+                    db.MicId = current[1];
+                    db.filePath = current[2];
+                    db.save();
+                })
+                console.log("Please restart the server.")
+            }
+        });
+    }
+    setSeedaudioClassManage();
 
     //建 camerafield 測試資料
     function setSeedcamerafield() {

@@ -12,66 +12,64 @@
     <title><%= title %></title>
 
     <script src="/dist/js/pace.min.js"></script>
-    <link href="/dist/css/pace.css" rel="stylesheet" />
+    <link href="/dist/css/pace.css" rel="stylesheet"/>
     <script src="/build/audioClassManage_create.bundle.js"></script>
 </head>
 
 <body>
-    <% include ../layout/header.html %>
+<% include ../layout/header.html %>
 
-    <main class="container-xl new-bgcolor new-view-title" role="main">
-        <div class="row">
-            <div class="col-md-12">
-                <form id="eventACreateForm" action="/audioClassManage/createEventA" class="form-horizontal" method="POST">
-                    <div style="display: none;">
-                        <input class="form-control" name="createdAuthor" readonly type="text" value="<%= loginID %>">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <h3><strong>新增音檔分類管理</strong></h3>
-                            </div>
+<main class="container-xl new-bgcolor new-view-title" role="main">
+    <div class="row">
+        <div class="col-md-12">
+            <form id="eventACreateForm" action="/audioClassManage/createEventA" class="form-horizontal" method="POST">
+                <div style="display: none;">
+                    <input class="form-control" name="createdAuthor" readonly type="text" value="<%= loginID %>">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h3><strong>新增音檔分類管理</strong></h3>
                         </div>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="Name" id="Name_Title">名稱<span class="text-danger">*</span></label>
-                                <input class="form-control" id="Name" name="Name" required type="text">
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="Name" id="Name_Title">名稱<span class="text-danger">*</span></label>
+                            <input class="form-control" id="Name" name="Name" required type="text">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="MicId" id="MicId_Title">麥克風編號<span class="text-danger">*</span></label>
-                                <input class="form-control" id="MicId" name="MicId" required type="text">
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="filePath" id="filePath_Title">路徑<span class="text-danger">*</span></label>
+                            <input class="form-control" id="filePath" name="filePath" required type="text">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="filePath" id="filePath_Title">路徑<span class="text-danger">*</span></label>
-                                <input class="form-control" id="filePath" name="filePath" required type="text">
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="MicId" id="MicId_Title">麥克風編號由資料夾名稱的尾數決定 1:a , 2:b , 其它: c</label>
+                            <input class="form-control" id="MicId" name="MicId" required type="text" readonly>
                         </div>
                     </div>
-
-                    <div class="form-row text-right">
-                        <!-- Grid column -->
-                        <div class="col-md-12">
-                            <input class="btn btn-info" id="reset" type="button" value="重設">
-                            <input class="btn btn-primary" type="submit" value="確定新增">
-                            <a class="btn btn-danger btn-md" href="/audioClassManage">取消</a>
-                        </div>
-                        <!-- Grid column -->
+                </div>
+                <div class="form-row text-right">
+                    <!-- Grid column -->
+                    <div class="col-md-12">
+                        <input class="btn btn-info" id="reset" type="button" value="重設">
+                        <input class="btn btn-primary" type="submit" value="確定新增">
+                        <a class="btn btn-danger btn-md" href="/audioClassManage">取消</a>
                     </div>
-                </form>
-            </div>
+                    <!-- Grid column -->
+                </div>
+            </form>
         </div>
-    </main>
+    </div>
+</main>
 </body>
-
 </html>

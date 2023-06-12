@@ -226,7 +226,7 @@ function checkFileCopyComplete(path, prev, EventA, AudioRaw, AudioTen) {
 	var hours = parseInt(fileName.slice(9, 11));
 	var minutes = parseInt(fileName.slice(11, 13));
 	var seconds = parseInt(fileName.slice(13, 15));
-	var micID = (pieces[3]).slice(7, 8) == '1' ? 'a' : (pieces[3]).slice(7, 8) == '2'? 'b':'c';
+	var micID = (pieces[3]).slice(-1) == '1' ? 'a' : (pieces[3]).slice(-1) == '2'? 'b':'c';
 	fs.stat(path, function (err, stat) {
 
 		if (err) {
@@ -612,7 +612,7 @@ module.exports = {
 				var hours = parseInt(fileName.slice(9, 11));
 				var minutes = parseInt(fileName.slice(11, 13));
 				var seconds = parseInt(fileName.slice(13, 15));
-				var micID = (pieces[3]).slice(7, 8) == '1' ? 'a' : (pieces[3]).slice(7, 8) == '2'? 'b':'c';
+				var micID = (pieces[3]).slice(-1) == '1' ? 'a' : (pieces[3]).slice(-1) == '2'? 'b':'c';
                 var dir = pieces[pieces.length-2];
 				getAudioDurationInSeconds(audio).then((duration) => {
 					var endSeconds = seconds + duration;

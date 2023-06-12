@@ -57,20 +57,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="MicId" id="MicId_Title">麥克風編號<span class="text-danger">*</span></label>
-                                <input class="form-control" id="MicId" name="MicId" value="<%= datarow.MicId %>" required type="text">
+                                <label for="filePath" id="filePath_Title">路徑<span class="text-danger">*</span></label>
+                                <input class="form-control" id="filePath" name="filePath"  value="<%= datarow.filePath %>" required type="text">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="filePath" id="filePath_Title">路徑<span class="text-danger">*</span></label>
-                                <input class="form-control" id="filePath" name="filePath"  value="<%= datarow.filePath %>" required type="text">
+                                <label for="MicId" id="MicId_Title">麥克風編號由資料夾名稱的尾數決定 1:a , 2:b , 其它: c</label>
+                                <input class="form-control" id="MicId" name="MicId" value="<%= datarow.MicId %>" required type="text" readonly>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row text-right">
                         <!-- Grid column -->
                         <div class="col-md-12">

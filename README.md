@@ -20,7 +20,7 @@
     2. producedAudio
     3. test    
 
-- 執行 `npm run start`
+- 執行 `npm run bstart`
 - `npm run development`
 
 

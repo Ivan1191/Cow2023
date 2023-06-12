@@ -43,4 +43,21 @@ $(document).ready(function () {
         $('#filePath').val('');
     });
 
+    //讓使用者知道設定的資料夾麥克風編號如何
+    $('#filePath').on('change', function () {
+        var ori_text = $('#filePath').val().slice(-1);
+        var text = '';
+        switch (ori_text) {
+            case '1':
+                text = 'a';
+                break;
+            case '2':
+                text = 'b';
+                break;
+            default:
+                text = 'c';
+                break;
+        }
+        $('#MicId').val(text);
+    });
 });
