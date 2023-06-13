@@ -10,22 +10,42 @@ import 'cheers-alert/src/cheers-alert.css'; //load style
 import 'font-awesome/css/font-awesome.min.css'; //load font-awesome
 import GHelper from 'ghelper.js';
 
+
 var moment = require('moment-timezone');
 moment.tz.setDefault("Asia/Taipei");
 
 $(document).ready(function () {
+    $.ajax({
+        url: "/audio/audioClassManageSelect",
+        type: "POST",
+        success: (data) => {
+            console.log(data);
+            var select = $('#audioClassManageSelect');
+            $('option', select).remove();
+            select.append(new Option("----請選擇----", ""));
+            data.rows.forEach(function (row) {
+                var spilt_str = row.filePath.split('/');
+                var option = new Option(row.Name, spilt_str[spilt_str.length - 1]);
+                select.append($(option));
+            });
+        },
+        error: (data) => {
+            // $("#alert-box").show();
+        }
+    });
+
     var table = $('#audio_list').DataTable({
         deferRender: true,
         ajax: {
             url: '/audio/listAudioRawAll',
             type: 'POST',
+            data: function(d){
+                d.filepath = $('#audioClassManageSelect').val();
+            },
             dataSrc: function (json) {
                 // console.log(json);
                 return json;
             },
-            data: function () {
-                return {};
-            }
         },
         columns: [{
             data: "audioname",
@@ -73,6 +93,11 @@ $(document).ready(function () {
         // "paging": false
     });
 
+
+    $("#audioClassManageSelect").on("change", function () {
+        console.log($('#audioClassManageSelect').val(), "table.ajax.reload();");
+        $('#audio_list').DataTable().ajax.reload();
+    });
 });
 
 window.delEvent = function (id) {

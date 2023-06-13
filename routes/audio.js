@@ -6,6 +6,8 @@ var EventB = require('../models/eventB');
 var htA = require('../models/htA');
 var htB = require('../models/htB');
 var AudioRaw = require('../models/audioRaw')
+var audioClassManage = require('../models/audioClassManage');
+
 var fs = require('fs');
 var uuid = require('uuid');
 var childExec = require('child_process').exec;
@@ -13,7 +15,7 @@ const {
     format
 } = require('morgan');
 var moment = require('moment-timezone');
-const { relativeTimeThreshold } = require('moment-timezone');
+const {relativeTimeThreshold} = require('moment-timezone');
 moment.tz.setDefault("Asia/Taipei");
 var isLoggedIn = true;
 const audioTenPrefix = "D:/producedAudio/audioTen/";
@@ -269,134 +271,134 @@ function makeUserDir(loginId) {
 }
 
 // 尋找時間點的前/後一共2小時範圍的關聯音檔
-function findAudio3(tagTime, res, lr){
+function findAudio3(tagTime, res, lr) {
     return new Promise(function (resolve, reject) {
         // var starttime = new Date(tagTime.getTime()-5*60*1000);
         // var endtime = new Date(tagTime.getTime()+5*60*1000);
         var starttime;
         var endtime;
-        if(lr == 'l'){
-            starttime = new Date(tagTime.getTime()-1*60*60*1000-55*60*1000);
-            endtime = new Date(tagTime.getTime()+5*60*1000);
-        }else if(lr == 'r'){
-            starttime = new Date(tagTime.getTime()-5*60*1000);
-            endtime = new Date(tagTime.getTime()+1*60*60*1000+55*60*1000);
+        if (lr == 'l') {
+            starttime = new Date(tagTime.getTime() - 1 * 60 * 60 * 1000 - 55 * 60 * 1000);
+            endtime = new Date(tagTime.getTime() + 5 * 60 * 1000);
+        } else if (lr == 'r') {
+            starttime = new Date(tagTime.getTime() - 5 * 60 * 1000);
+            endtime = new Date(tagTime.getTime() + 1 * 60 * 60 * 1000 + 55 * 60 * 1000);
         }
 
         AudioRaw.find({
-            $or: [{
-                $and: [{
-                    starttime: {
-                        $lte: starttime
-                    }
+                $or: [{
+                    $and: [{
+                        starttime: {
+                            $lte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: starttime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: starttime
-                    }
-                }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $lte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $lte: endtime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: endtime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $gte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $lte: endtime
+                        }
+                    }]
                 }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $gte: starttime
-                    }
-                }, {
-                    endtime: {
-                        $lte: endtime
-                    }
-                }]
-            }]
-        }, {}, {
-            sort: {
-                "microid": 1,
-                "starttime": 1
-            }
-        },
-        function (err, audios) {
-            if (err) {
-                console.error(err);
-                res.status(500).json({
-                    result: -1,
-                    message: err
+            }, {}, {
+                sort: {
+                    "microid": 1,
+                    "starttime": 1
+                }
+            },
+            function (err, audios) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({
+                        result: -1,
+                        message: err
+                    });
+                    return;
+                }
+                resolve({
+                    audios: audios,
+                    starttime: starttime,
+                    endtime: endtime,
                 });
-                return;
-            }
-            resolve({
-                audios: audios,
-                starttime: starttime,
-                endtime: endtime,
             });
-        });
     });
 }
 
-function findAudio(tagTime, res){
+function findAudio(tagTime, res) {
     return new Promise(function (resolve, reject) {
-        var starttime = new Date(tagTime.getTime()-5*60*1000);
-        var endtime = new Date(tagTime.getTime()+5*60*1000);
+        var starttime = new Date(tagTime.getTime() - 5 * 60 * 1000);
+        var endtime = new Date(tagTime.getTime() + 5 * 60 * 1000);
         AudioRaw.find({
-            $or: [{
-                $and: [{
-                    starttime: {
-                        $lte: starttime
-                    }
+                $or: [{
+                    $and: [{
+                        starttime: {
+                            $lte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: starttime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: starttime
-                    }
-                }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $lte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $lte: endtime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: endtime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $gte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $lte: endtime
+                        }
+                    }]
                 }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $gte: starttime
-                    }
-                }, {
-                    endtime: {
-                        $lte: endtime
-                    }
-                }]
-            }]
-        }, {}, {
-            sort: {
-                "microid": 1,
-                "starttime": 1
-            }
-        },
-        function (err, audios) {
-            if (err) {
-                console.error(err);
-                res.status(500).json({
-                    result: -1,
-                    message: err
+            }, {}, {
+                sort: {
+                    "microid": 1,
+                    "starttime": 1
+                }
+            },
+            function (err, audios) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({
+                        result: -1,
+                        message: err
+                    });
+                    return;
+                }
+                resolve({
+                    audios: audios,
+                    starttime: starttime,
+                    endtime: endtime,
                 });
                 return;
-            }
-            resolve({
-                audios: audios,
-                starttime: starttime,
-                endtime: endtime,
             });
-            return;
-        });
     });
 }
 
@@ -446,10 +448,12 @@ function getAdjustTenMinAudio(fileNameList, startTime, endTime, filePath, loginI
                         if (error !== null) {
                             // console.log('cutExec error: ' + error);
                         }
-                        fs.unlink('D:/producedAudio/tmp/output_' + mark + '.wav', () => {});
+                        fs.unlink('D:/producedAudio/tmp/output_' + mark + '.wav', () => {
+                        });
                         var a = cutOutputFileName.split('_');
-                        a = a[0]+"Tmp_"+a[1];
-                        fs.unlink(a, () => {});
+                        a = a[0] + "Tmp_" + a[1];
+                        fs.unlink(a, () => {
+                        });
 
                         resolve({
                             cutOutputFileName: cutOutputFileName,
@@ -466,76 +470,76 @@ function getAdjustTenMinAudio(fileNameList, startTime, endTime, filePath, loginI
     });
 }
 
-function getStartEndAudioInfo(starttime, endtime,res){
+function getStartEndAudioInfo(starttime, endtime, res) {
     return new Promise(function (resolve, reject) {
         AudioRaw.find({
-            $or: [{
-                $and: [{
-                    starttime: {
-                        $lte: starttime
-                    }
+                $or: [{
+                    $and: [{
+                        starttime: {
+                            $lte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: starttime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: starttime
-                    }
-                }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $lte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $lte: endtime
+                        }
+                    }, {
+                        endtime: {
+                            $gte: endtime
+                        }
+                    }]
                 }, {
-                    endtime: {
-                        $gte: endtime
-                    }
+                    $and: [{
+                        starttime: {
+                            $gte: starttime
+                        }
+                    }, {
+                        endtime: {
+                            $lte: endtime
+                        }
+                    }]
                 }]
-            }, {
-                $and: [{
-                    starttime: {
-                        $gte: starttime
-                    }
-                }, {
-                    endtime: {
-                        $lte: endtime
-                    }
-                }]
-            }]
-        }, {}, {
-            sort: {
-                "microid": 1,
-                "starttime": 1
-            }
-        },
-        function (err, audios) {
-            if (err) {
-                console.error(err);
-                res.status(500).json({
-                    result: -1,
-                    message: err
-                });
-                return;
-            }
-            if(audios.length==0){
-                res.status(500).json({
-                    result: -1,
-                    message: "錯誤!: 找不到原始音檔資訊"
-                });
-            }else{
-                var audioStart=audios[0];
-                var audioEnd=audios[audios.length-1];
-                resolve({
-                    audioStart: audioStart,
-                    audioEnd: audioEnd,
-                });
-            }
-        });
+            }, {}, {
+                sort: {
+                    "microid": 1,
+                    "starttime": 1
+                }
+            },
+            function (err, audios) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({
+                        result: -1,
+                        message: err
+                    });
+                    return;
+                }
+                if (audios.length == 0) {
+                    res.status(500).json({
+                        result: -1,
+                        message: "錯誤!: 找不到原始音檔資訊"
+                    });
+                } else {
+                    var audioStart = audios[0];
+                    var audioEnd = audios[audios.length - 1];
+                    resolve({
+                        audioStart: audioStart,
+                        audioEnd: audioEnd,
+                    });
+                }
+            });
     });
 }
 
-function parseStartEndAudioInfo(starttime, endtime, audioStart, audioEnd){
+function parseStartEndAudioInfo(starttime, endtime, audioStart, audioEnd) {
     return new Promise(function (resolve, reject) {
-        var audioStartTime = (new Date(starttime)-audioStart.starttime)/1000;
-        var audioEndTime = (new Date(endtime)-audioEnd.starttime)/1000;
+        var audioStartTime = (new Date(starttime) - audioStart.starttime) / 1000;
+        var audioEndTime = (new Date(endtime) - audioEnd.starttime) / 1000;
         resolve({
             audioStart: audioStart.audioname + "_" + audioStartTime.toString(),
             audioEnd: audioEnd.audioname + "_" + audioEndTime.toString(),
@@ -545,6 +549,7 @@ function parseStartEndAudioInfo(starttime, endtime, audioStart, audioEnd){
 
 /* GET audio list page. */
 router.get('/', function (req, res, next) {
+
     res.render('audio/index', {
         title: 'Web Audio Editor',
         loginID: req.session.loginID,
@@ -554,7 +559,6 @@ router.get('/', function (req, res, next) {
         permissions: req.session.permissions,
         role: req.session.role,
     });
-
 });
 
 router.get('/edit', function (req, res, next) {
@@ -574,19 +578,19 @@ router.get('/edit', function (req, res, next) {
     var micro = "";
     if (micronum === "1") {
         micro = "a";
-    } else if(micronum === "2"){
+    } else if (micronum === "2") {
         micro = "b";
     } else {
-             micro = "c";
-     }
+        micro = "c";
+    }
 
     if (req.query._id != undefined && req.query._id != 'undefined') {
         if (req.query.active == '/pro') { // from eventB
             EventB.findById({
                 _id: req.query._id
             }, function (err, event) {
-                if(event.sourceId.length>25){
-                    AudioRaw.findOne({ filePath: event.sourceId }, function(err, audio){
+                if (event.sourceId.length > 25) {
+                    AudioRaw.findOne({filePath: event.sourceId}, function (err, audio) {
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
                             fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
@@ -607,7 +611,7 @@ router.get('/edit', function (req, res, next) {
                                 tenDate: event.tenDate,
                                 source: audio,
                                 sourceId: event.id,
-                                type : "audio",
+                                type: "audio",
                             });
                         } else {
                             res.render('pro/index', {
@@ -623,8 +627,8 @@ router.get('/edit', function (req, res, next) {
                         }
                     });
 
-                }else{
-                    EventA.findById({ _id: event.sourceId }, function(err, eventA){
+                } else {
+                    EventA.findById({_id: event.sourceId}, function (err, eventA) {
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
                             fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
@@ -645,7 +649,7 @@ router.get('/edit', function (req, res, next) {
                                 tenDate: event.tenDate,
                                 source: eventA,
                                 sourceId: event.id,
-                                type : "event"
+                                type: "event"
                             });
                         } else {
                             res.render('pro/index', {
@@ -694,7 +698,7 @@ router.get('/edit', function (req, res, next) {
                                 zeroDate: event.starttime,
                                 tenDate: event.endtime,
                                 sourceId: req.query._id,
-                        });
+                            });
                         } else {
                             res.render('audio/editor', {
                                 title: 'Audio Editor',
@@ -735,8 +739,8 @@ router.get('/edit', function (req, res, next) {
                                 zeroDate: event.starttime,
                                 tenDate: event.endtime,
                                 sourceId: req.query._id,
-                        });
-                        }else{
+                            });
+                        } else {
                             res.render('audio/editor', {
                                 title: 'Audio Editor',
                                 temperature: "沒有溫度資料",
@@ -827,7 +831,7 @@ router.get('/edit', function (req, res, next) {
                             sourceId: audio.filePath,
                             source: audio,
                         });
-                    }else{
+                    } else {
                         res.render('audio/editor', {
                             title: 'Audio Editor',
                             temperature: audiotime.temperature,
@@ -848,24 +852,24 @@ router.get('/edit', function (req, res, next) {
                     }
 
                 });
-            }else if(audio.microid ==="c"){
-                                    res.render('audio/editor', {
-                                        title: 'Audio Editor',
-                                        temperature: NaN,
-                                        humidity: NaN,
-                                        loginID: req.session.loginID,
-                                        userName: req.session.userName,
-                                        isLoggedIn: isLoggedIn,
-                                        fileName: fileName,
-                                        active: req.query.active,
-                                        permissions: req.session.permissions,
-                                        role: req.session.role,
-                                        microId: audio.microid,
-                                        zeroDate: audio.starttime,
-                                        tenDate: audio.endtime,
-                                        sourceId: audio.filePath,
-                                        source: audio,
-                                    });
+            } else if (audio.microid === "c") {
+                res.render('audio/editor', {
+                    title: 'Audio Editor',
+                    temperature: NaN,
+                    humidity: NaN,
+                    loginID: req.session.loginID,
+                    userName: req.session.userName,
+                    isLoggedIn: isLoggedIn,
+                    fileName: fileName,
+                    active: req.query.active,
+                    permissions: req.session.permissions,
+                    role: req.session.role,
+                    microId: audio.microid,
+                    zeroDate: audio.starttime,
+                    tenDate: audio.endtime,
+                    sourceId: audio.filePath,
+                    source: audio,
+                });
 
             }
         });
@@ -902,8 +906,8 @@ router.get('/view', function (req, res, next) {
             EventB.findById({
                 _id: req.query._id
             }, function (err, event) {
-                if(event.sourceId.length>25){
-                    AudioRaw.findOne({ filePath: event.sourceId }, function(err, audio){
+                if (event.sourceId.length > 25) {
+                    AudioRaw.findOne({filePath: event.sourceId}, function (err, audio) {
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
                             fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
@@ -924,7 +928,7 @@ router.get('/view', function (req, res, next) {
                                 tenDate: event.tenDate,
                                 source: audio,
                                 sourceId: event.id,
-                                type : "audio"
+                                type: "audio"
                             });
                         } else {
                             res.render('pro/index', {
@@ -940,8 +944,8 @@ router.get('/view', function (req, res, next) {
                         }
                     });
 
-                }else{
-                    EventA.findById({ _id: event.sourceId }, function(err, eventA){
+                } else {
+                    EventA.findById({_id: event.sourceId}, function (err, eventA) {
                         if (!fs.existsSync('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock')) {
                             fs.writeFile('D:/producedAudio/tmp/' + req.session.loginID + '/' + req.query._id + '.lock', Date.now().toString(), () => {
                             });
@@ -962,7 +966,7 @@ router.get('/view', function (req, res, next) {
                                 tenDate: event.tenDate,
                                 source: eventA,
                                 sourceId: event.id,
-                                type : "event"
+                                type: "event"
                             });
                         } else {
                             res.render('pro/index', {
@@ -1022,8 +1026,8 @@ router.get('/view', function (req, res, next) {
 router.post('/createEventB', function (req, res) {
     makeCompleteDir().then(() => {
         makeUserDir(req.body["loginID"]).then(() => {
-            getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'],res).then((data)=>{
-                parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data)=>{
+            getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], res).then((data) => {
+                parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data) => {
                     var loginId = req.body["loginID"];
                     var inputFilePath = getFullFilePath(req.body["filePath"]);
                     var newevent = new EventB();
@@ -1076,6 +1080,7 @@ router.post('/createEventB', function (req, res) {
         })
     });
 });
+
 function getAudio(fileNameList, startTime, endTime, timeStamp, eventid) {
     makeCompleteDir().then(() => {
         var mark = uuid.v4();
@@ -1114,26 +1119,25 @@ function getAudio(fileNameList, startTime, endTime, timeStamp, eventid) {
                 if (error !== null) {
                     // console.log('cutExec error: ' + error);
                 }
-                fs.unlink('D:/producedAudio/tmp/output_' + mark + '.wav', () => {});
+                fs.unlink('D:/producedAudio/tmp/output_' + mark + '.wav', () => {
+                });
             });
         });
     })
 }
+
 // update eventB
 router.post('/updateEventB', function (req, res) {
 
-    EventB.findById(req.body.id,function(err,eventB){
-        if(eventB.hard !== req.body.hard)
-        {
+    EventB.findById(req.body.id, function (err, eventB) {
+        if (eventB.hard !== req.body.hard) {
             var neweventstarttime = req.body.tagDate;
             var neweventendtime;
-            if(req.body.hard === "自然分娩")
-            {
+            if (req.body.hard === "自然分娩") {
                 neweventstarttime = moment(req.body.tagDate).subtract(60, 'minutes');
                 neweventendtime = moment(req.body.tagDate);
                 console.log("自然分娩");
-            }else
-            {
+            } else {
                 neweventstarttime = moment(req.body.tagDate).subtract(30, 'minutes');
                 neweventendtime = moment(req.body.tagDate);
                 console.log("其他分娩");
@@ -1172,7 +1176,7 @@ router.post('/updateEventB', function (req, res) {
                             }
                         }]
                     }],
-                    microid : eventB.microId
+                    microid: eventB.microId
                 }, {}, {
                     sort: {
                         "microid": 1,
@@ -1211,10 +1215,9 @@ router.post('/updateEventB', function (req, res) {
                         }
                     }
 
-                    if(map.size==0)
-                    {
-                        getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data)=>{
-                            parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data)=>{
+                    if (map.size == 0) {
+                        getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data) => {
+                            parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data) => {
                                 var inputFileName = getFullFilePath(req.body.filePath);
                                 var outputFileName = 'D:/producedAudio/audioTen/' + req.body.id + ".wav";
                                 var cutExec = require('child_process').exec;
@@ -1275,7 +1278,7 @@ router.post('/updateEventB', function (req, res) {
                                             });
                                         }
                                     })
-            
+
                                 });
                             });
                         });
@@ -1315,11 +1318,12 @@ router.post('/updateEventB', function (req, res) {
                                 // console.log("==========>  /event/A/create  結束  <==========")
 
                                 var outputFilePath = "D:/producedAudio/audioTen/" + eventB.id + ".wav";
-                                fs.unlink(outputFilePath, () => {});
+                                fs.unlink(outputFilePath, () => {
+                                });
 
                                 getAudio(fileNameList, startTime, endTime, timeStamp, eventB.id)
-                                getStartEndAudioInfo(neweventstarttime, neweventendtime,res).then((data)=>{
-                                    parseStartEndAudioInfo(neweventstarttime, neweventendtime, data.audioStart, data.audioEnd).then((data)=>{
+                                getStartEndAudioInfo(neweventstarttime, neweventendtime, res).then((data) => {
+                                    parseStartEndAudioInfo(neweventstarttime, neweventendtime, data.audioStart, data.audioEnd).then((data) => {
                                         EventB.findByIdAndUpdate(req.body.id, {
                                             tagDate: req.body.tagDate,
                                             hard: req.body.hard,
@@ -1358,13 +1362,12 @@ router.post('/updateEventB', function (req, res) {
                         });
                     });
                 }
-
             );
-        }else{
+        } else {
 
 
-            getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data)=>{
-                parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data)=>{
+            getStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate']).then((data) => {
+                parseStartEndAudioInfo(req.body['zeroDate'], req.body['tenDate'], data.audioStart, data.audioEnd).then((data) => {
                     var inputFileName = getFullFilePath(req.body.filePath);
                     var outputFileName = 'D:/producedAudio/audioTen/' + req.body.id + ".wav";
                     var cutExec = require('child_process').exec;
@@ -1435,8 +1438,19 @@ router.post('/updateEventB', function (req, res) {
 });
 
 router.post('/listAudioRawAll', function (req, res) {
-    AudioRaw.find({}, function (err, audios) {
+    // console.log(req.body.filepath, "===listAudioRawAll===");
+    AudioRaw.find({ "filePath": { $regex: new RegExp(req.body.filepath, 'i') } }, function (err, audios) {
         res.send(audios);
+    });
+});
+
+router.post('/audioClassManageSelect', function (req, res) {
+    audioClassManage.find({}, function (err, rows) {
+        res.status(201).json({
+            result: 1,
+            message: 'get audioClassManageSelect successfully',
+            rows: rows,
+        });
     });
 });
 
@@ -1544,35 +1558,35 @@ router.post('/clearCurrentTmp', function (req, res) {
     });
 });
 
-router.post('/loadLeft', function (req, res){
+router.post('/loadLeft', function (req, res) {
     // findAudio(new Date(new Date(req.body['zeroDate']).getTime()-5*60*1000), res, 'l').then((datas)=>{
-    findAudio3(new Date(new Date(req.body['zeroDate']).getTime()-5*60*1000-1*1000), res, 'l').then((datas)=>{
-        var fileNameList=[];
-        var fileNameListLastStarttime="";
-        var fileNameListFirstEndtime="";
+    findAudio3(new Date(new Date(req.body['zeroDate']).getTime() - 5 * 60 * 1000 - 1 * 1000), res, 'l').then((datas) => {
+        var fileNameList = [];
+        var fileNameListLastStarttime = "";
+        var fileNameListFirstEndtime = "";
         var totaltime = 0;
-        if(datas.audios.length!=0){
-            for(var i=datas.audios.length-1; i>-1; i--){
+        if (datas.audios.length != 0) {
+            for (var i = datas.audios.length - 1; i > -1; i--) {
                 // if(datas.audios[i].endtime < new Date(datas.endtime.getTime()-10*60*1000)){
-                if(totaltime>600){
+                if (totaltime > 600) {
                     break;
-                }else{
+                } else {
                     fileNameList.push(datas.audios[i].filePath);
-                    totaltime+=parseInt(datas.audios[i].duration);
-                    fileNameListLastStarttime=datas.audios[i].starttime;
+                    totaltime += parseInt(datas.audios[i].duration);
+                    fileNameListLastStarttime = datas.audios[i].starttime;
                 }
             }
-            fileNameListFirstEndtime=datas.audios[datas.audios.length-1].endtime;
+            fileNameListFirstEndtime = datas.audios[datas.audios.length - 1].endtime;
         }
         fileNameList.reverse();
-        if(fileNameList.length!=0){
+        if (fileNameList.length != 0) {
             var starttime;
             var endtime;
-            starttime = (totaltime*1000-(fileNameListFirstEndtime-datas.endtime)-10*60*1000)/1000;
-            endtime = (totaltime*1000-(fileNameListFirstEndtime-datas.endtime))/1000;
+            starttime = (totaltime * 1000 - (fileNameListFirstEndtime - datas.endtime) - 10 * 60 * 1000) / 1000;
+            endtime = (totaltime * 1000 - (fileNameListFirstEndtime - datas.endtime)) / 1000;
             // starttime = fileNameListLastStarttime;
             // endtime = ;
-            getAdjustTenMinAudio(fileNameList, starttime, endtime, req.body.filePath, req.body.loginID).then((datas1)=>{
+            getAdjustTenMinAudio(fileNameList, starttime, endtime, req.body.filePath, req.body.loginID).then((datas1) => {
                 // console.log(datas1);
                 getWavformDat(datas1.cutOutputFileName, datas1.waveformOutputFileName).then(() => {
                     res.status(200).json({
@@ -1580,12 +1594,12 @@ router.post('/loadLeft', function (req, res){
                         filePathNew: datas1.filePathNew,
                         wavefromPath: datas1.waveformPath,
                         // startTimeNew: new Date(new Date(req.body['zeroDate']).getTime()+10*60*1000),
-                        startTimeNew: new Date(fileNameListLastStarttime.getTime()+starttime*1000),
-                        endTimeNew: totaltime-endtime>0? new Date(fileNameListFirstEndtime.getTime()-(totaltime-endtime)*1000) : fileNameListFirstEndtime
+                        startTimeNew: new Date(fileNameListLastStarttime.getTime() + starttime * 1000),
+                        endTimeNew: totaltime - endtime > 0 ? new Date(fileNameListFirstEndtime.getTime() - (totaltime - endtime) * 1000) : fileNameListFirstEndtime
                     });
                 });
             });
-        }else{
+        } else {
             res.status(201).json({
                 result: -1,
                 msg: "無法取得音檔!"
@@ -1594,32 +1608,32 @@ router.post('/loadLeft', function (req, res){
     });
 });
 
-router.post('/loadRight', function (req, res){
+router.post('/loadRight', function (req, res) {
     // findAudio(new Date(new Date(req.body['tenDate']).getTime()+5*60*1000), res, 'r').then((datas)=>{
-    findAudio3(new Date(new Date(req.body['tenDate']).getTime()+5*60*1000+1*1000), res, 'r').then((datas)=>{
-        var fileNameList=[];
-        var fileNameListFirstStarttime="";
-        var fileNameListLastEndtime="";
+    findAudio3(new Date(new Date(req.body['tenDate']).getTime() + 5 * 60 * 1000 + 1 * 1000), res, 'r').then((datas) => {
+        var fileNameList = [];
+        var fileNameListFirstStarttime = "";
+        var fileNameListLastEndtime = "";
         var totaltime = 0;
-        if(datas.audios.length!=0){
-            for(var i=0; i<datas.audios.length; i++){
+        if (datas.audios.length != 0) {
+            for (var i = 0; i < datas.audios.length; i++) {
                 // if(datas.audios[i].starttime > new Date(datas.starttime.getTime()+10*60*1000)){
-                if(totaltime>600){
+                if (totaltime > 600) {
                     break;
-                }else{
+                } else {
                     fileNameList.push(datas.audios[i].filePath);
-                    totaltime+=parseInt(datas.audios[i].duration);
-                    fileNameListLastEndtime=datas.audios[i].endtime;
+                    totaltime += parseInt(datas.audios[i].duration);
+                    fileNameListLastEndtime = datas.audios[i].endtime;
                 }
             }
-            fileNameListFirstStarttime=datas.audios[0].starttime;
+            fileNameListFirstStarttime = datas.audios[0].starttime;
         }
-        if(fileNameList.length!=0){
+        if (fileNameList.length != 0) {
             var starttime;
             var endtime;
-            starttime = (datas.starttime-datas.audios[0].starttime)/1000;
-            endtime = (datas.starttime-datas.audios[0].starttime+10*60*1000)/1000;
-            getAdjustTenMinAudio(fileNameList, starttime, endtime, req.body.filePath, req.body.loginID).then((datas1)=>{
+            starttime = (datas.starttime - datas.audios[0].starttime) / 1000;
+            endtime = (datas.starttime - datas.audios[0].starttime + 10 * 60 * 1000) / 1000;
+            getAdjustTenMinAudio(fileNameList, starttime, endtime, req.body.filePath, req.body.loginID).then((datas1) => {
                 // console.log(datas1);
                 getWavformDat(datas1.cutOutputFileName, datas1.waveformOutputFileName).then(() => {
                     res.status(200).json({
@@ -1627,12 +1641,12 @@ router.post('/loadRight', function (req, res){
                         filePathNew: datas1.filePathNew,
                         wavefromPath: datas1.waveformPath,
                         // startTimeNew: new Date(new Date(req.body['zeroDate']).getTime()+10*60*1000),
-                        startTimeNew: new Date(fileNameListFirstStarttime.getTime()+starttime*1000),
-                        endTimeNew: totaltime-endtime>0? new Date(fileNameListLastEndtime.getTime()-(totaltime-endtime)*1000) : fileNameListLastEndtime
+                        startTimeNew: new Date(fileNameListFirstStarttime.getTime() + starttime * 1000),
+                        endTimeNew: totaltime - endtime > 0 ? new Date(fileNameListLastEndtime.getTime() - (totaltime - endtime) * 1000) : fileNameListLastEndtime
                     });
                 });
             });
-        }else{
+        } else {
             res.status(201).json({
                 result: -1,
                 msg: "無法取得音檔!"
@@ -1641,7 +1655,7 @@ router.post('/loadRight', function (req, res){
     });
 });
 
-router.post('/filter', function(req, res){
+router.post('/filter', function (req, res) {
     var filePath = req.body["filePath"];
     var loginID = req.body["loginID"];
     var filterType = req.body["filterType"];
@@ -1653,18 +1667,19 @@ router.post('/filter', function(req, res){
     var waveformPath = getHalfFilePath(waveformOutputFileName);
 
     command = "start D://api/" + filterType + ".exe " + filePath + " " + cutOutputFileName;
-	cutChild = childExec(command, function (error, stdout, stderr) {
-		// console.log('stdout: ' + stdout);
-		// console.log('stderr: ' + stderr);
-		if (error !== null) {
+    cutChild = childExec(command, function (error, stdout, stderr) {
+        // console.log('stdout: ' + stdout);
+        // console.log('stderr: ' + stderr);
+        if (error !== null) {
             // console.log('cutExec error: ' + error);
             res.status(201).json({
                 result: -1
             });
-        }else{
+        } else {
             var a = cutOutputFileName.split('_');
-            a = a[0]+"Tmp_"+a[1];
-            fs.unlink(a, () => {});
+            a = a[0] + "Tmp_" + a[1];
+            fs.unlink(a, () => {
+            });
             getWavformDat(cutOutputFileName, waveformOutputFileName).then(() => {
                 res.status(201).json({
                     result: 1,
@@ -1673,7 +1688,7 @@ router.post('/filter', function(req, res){
                 });
             });
         }
-	});
+    });
 
 
 });
