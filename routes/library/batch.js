@@ -6,24 +6,9 @@ const {
 	getAudioDurationInSeconds
 } = require('get-audio-duration');
 const eventA = require('../../models/eventA');
-const dirRawA = 'D:/test/wave/cow-mic1'
-const dirRawB = 'D:/test/wave/cow-mic3'
+const audioClassManage = require('../../models/audioClassManage');
 const dirRawAll = 'D:/test/wave'
 const audioTenPrefix = 'D:/producedAudio/audioTen/'
-
-var watcherA = chokidar.watch(dirRawA, {
-	ignoreInitial: true,
-	useFsEvents : true
-	//usePolling:true,
-	//interval:3000
-});
-
-var watcherB = chokidar.watch(dirRawB, {
-	ignoreInitial: true,
-	useFsEvents : true
-	//usePolling:true,
-	//interval:3000
-});
 
 function compare(a, b) {
 	if (a.audioname < b.audioname) {
@@ -415,74 +400,50 @@ var fileCopyDelaySeconds = 1;
 module.exports = {
 
 	audio2DB: function (EventA, AudioRaw, AudioTen) {
-		watcherA
-			.on('add', function (path) {
-				//file name formate yyyymmdd_hhmmss_mic.wav
-				//console.log("新增原始音檔，原始音檔路徑: " + path);
 
-				 var pieces = (path.replace(/\\/g, '/')).split('/');
-				 //console.log(pieces)
-				 var dir = pieces[pieces.length-2];
+		//自動遍歷資料夾，如果有新檔案就寫入DB
+		audioClassManage.find({}, function (err, rows) {
+				rows.forEach(function (row) {
+					chokidar.watch(row.filePath, {
+						ignoreInitial: true,
+						useFsEvents: true
+						//usePolling:true,
+						//interval:3000
+					}).on('add', function (path) {
+						//file name formate yyyymmdd_hhmmss_mic.wav
+						// console.log("新增原始音檔，原始音檔路徑: " + path);
 
-				if((/^[-]?[\.\d]+$/.test(dir)))
-				{
-				    fs.stat(path, function (err, stat) {
-                    	if (err) {
-                    		// console.log('Error watching file for copy completion. ERR: ' + err.message);
-                    		// console.log('Error file not processed. PATH: ' + path);
-                    	} else {
-                    		// console.log('開始複製檔案' + path + '...');
-                    		setTimeout(checkFileCopyComplete, fileCopyDelaySeconds * 1000, path, stat, EventA, AudioRaw, AudioTen);
-                    	}
-                    });
-				}
+						var pieces = (path.replace(/\\/g, '/')).split('/');
+						//console.log(pieces)
+						var dir = pieces[pieces.length - 2];
 
-			})
-			.on('unlink', function (path) {
-				var filePath = path.replace(/\\/g, '/');
-				AudioRaw.deleteOne({
-					filePath: filePath
-				}, function (err) {
-					if (err) {
-						// console.log("刪除音檔>失敗<：" + path)
-						// console.log("ERROR");
-						return;
-					}
-					// console.log("刪除音檔>成功<：" + path)
+						if ((/^[-]?[\.\d]+$/.test(dir))) {
+							fs.stat(path, function (err, stat) {
+								if (err) {
+									// console.log('Error watching file for copy completion. ERR: ' + err.message);
+									// console.log('Error file not processed. PATH: ' + path);
+								} else {
+									// console.log('開始複製檔案' + path + '...');
+									setTimeout(checkFileCopyComplete, fileCopyDelaySeconds * 1000, path, stat, EventA, AudioRaw, AudioTen);
+								}
+							});
+						}
+					}).on('unlink', function (path) {
+						var filePath = path.replace(/\\/g, '/');
+						AudioRaw.deleteOne({
+							filePath: filePath
+						}, function (err) {
+							if (err) {
+								// console.log("刪除音檔>失敗<：" + path)
+								// console.log("ERROR");
+								return;
+							}
+							// console.log("刪除音檔>成功<：" + path)
+						});
+					});
 				});
-			})
-		watcherB
-			.on('add', function (path) {
-				//file name formate yyyymmdd_hhmmss_mic.wav
-				var pieces = (path.replace(/\\/g, '/')).split('/');
-                //console.log(pieces)
-                var dir = pieces[pieces.length-2];
-				if((/^[-]?[\.\d]+$/.test(dir)))
-                {
-				    fs.stat(path, function (err, stat) {
-				    	if (err) {
-				    		// console.log('Error watching file for copy completion. ERR: ' + err.message);
-				    		// console.log('Error file not processed. PATH: ' + path);
-				    	} else {
-				    		// console.log('開始複製檔案' + path + '...');
-				    		setTimeout(checkFileCopyComplete, fileCopyDelaySeconds * 1000, path, stat, EventA, AudioRaw, AudioTen);
-				    	}
-				    });
-				}
-			})
-			.on('unlink', function (path) {
-				var filePath = path.replace(/\\/g, '/');
-				AudioRaw.deleteOne({
-					filePath: filePath
-				}, function (err) {
-					if (err) {
-						// console.log("刪除音檔>失敗<：" + path)
-						// console.log("ERROR");
-						return;
-					}
-					// console.log("刪除音檔>成功<：" + path)
-				});
-			})
+		});
+
 	},
 
 	timeout: function (EventA, AudioTen) {
