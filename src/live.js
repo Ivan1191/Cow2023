@@ -37,7 +37,8 @@ $(document).ready(function () {
                 // console.log(this.text + " : " + this.value);
                 if(this.value!=''){
                     html += "<div class='show' id='show-" + this.value + "'>";
-                    html += "<canvas id='video-canvas-" + this.value + "' style='width:640px;height:480px'></canvas>";
+                    // html += "<canvas id='video-canvas-" + this.value + "' style='width:640px;height:480px'></canvas>";
+                    html += "<canvas id='video-canvas-" + this.value + "' style='width:95%;height:95%'></canvas>";
                     html += "<script type='text/javascript'>";
                     html += "var url = 'ws://127.0.0.1:" + this.value + "'; var canvas = document.getElementById('video-canvas-" + this.value + "');";
                     html += "var player = new JSMpeg.Player(url, {canvas: canvas, audio: true});";
