@@ -44,4 +44,8 @@ tskill PID
 對應到 public/build，但是因為不會自動重建，所以建議先刪除此資料夾，然後重新執行
 npm run build 已確保功能有更新
 
-pm2 start app.js
+- pm2 start app.js
+- pm2 list
+- pm2 delete { id or name }
+- pm2 stop { id or name }
+- pm2 restart { id or name }
