@@ -39,7 +39,7 @@ app.locals.moment = require('moment-timezone');
 app.locals.moment.tz.setDefault("Asia/Taipei");
 
 //Connect to MongoDB server on localhost, db name to be changed
-mongoose.connect("mongodb://127.0.0.1:27017/AnamalAudioManagement", {
+mongoose.connect("mongodb://127.0.0.1:27017/AnimalAudioManagement", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     server: {
@@ -240,11 +240,11 @@ var rule_min = new schedule.RecurrenceRule();
 // rule_min.minute = [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60];
 rule_min.minute = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60];
 var k = schedule.scheduleJob(rule_min, function () {
+    // 重複cmd錯誤bug->child_process問題
+    // video.pic_rtsp_1()
+    // video.pic_rtsp_2()
 
-    video.pic_rtsp_1()
-    video.pic_rtsp_2()
-
-    //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     // var v_name = ""
     // name_buf = 0
     // videoname1 = video.get_videoname1()

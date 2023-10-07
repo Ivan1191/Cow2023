@@ -126,7 +126,6 @@ router.get('/', function (req, res, next) {
     },);
 });
 
-
 router.post('/camerafieldsSelect', function (req, res) {
     camerafield.find({}, function (err, rows) {
         res.status(201).json({

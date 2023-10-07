@@ -19,26 +19,26 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
     //建 audioClassManage 測試資料
     function setSeedaudioClassManage() {
         audioClassManage.find({}, '-_id -__v -Name', function (err, db) {
-            console.log("Initializing db audioClassManage table.")
             if (err) {
                 console.error(err);
             } else if (!db.length) {
+                console.log("\n(Initializing db audioClassManage table)\n");
                 var dataArray = [
                     ['牛隻1', 'a', 'D:/test/wave/cow-mic1'],
                     ['牛隻2', 'c', 'D:/test/wave/cow-mic3']
                 ];
                 dataArray.forEach(function (current) {
-                    console.log(current,"||||");
+                    console.log('Data: ',current);
                     var db = new audioClassManage();
 
-                    console.log(db,"==========");
+                    console.log('DB: ',db);
 
                     db.Name = current[0];
                     db.MicId = current[1];
                     db.filePath = current[2];
                     db.save();
+                    console.log(" ");
                 })
-                console.log("Please restart the server.")
             }
         });
     }
@@ -47,27 +47,27 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
     //建 camerafield 測試資料
     function setSeedcamerafield() {
         camerafield.find({}, '-_id -__v -name', function (err, db) {
-            console.log("Initializing db camerafield table.")
             if (err) {
                 console.error(err);
             } else if (!db.length) {
+                console.log("\n(Initializing db camerafield table)\n");
                 var dataArray = [
                     ['第一台', 'streamName1', 'rtsp://admin:admin@192.168.12.61:55461', '3333'],
                     ['第二台', 'streamName2', 'rtsp://admin:admin@192.168.12.62:55462', '4444']
                 ];
                 dataArray.forEach(function (current) {
-                    console.log(current,"||||");
+                    console.log('Data: ',current);
                     var db = new camerafield();
 
-                    console.log(db,"==========");
+                    console.log('DB: ',db);
 
                     db.title = current[0];
                     db.name = current[1];
                     db.streamUrl = current[2];
                     db.wsPort = current[3];
                     db.save();
+                    console.log(" ");
                 })
-                console.log("Please restart the server.")
             }
         });
     }
@@ -76,10 +76,10 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
     //建 htManage 測試資料
     function sethtManage() {
         htManage.find({}, '-_id -__v -name', function (err, db) {
-            console.log("Initializing db htManage table.");
             if (err) {
                 console.error(err);
             } else if (!db.length) {
+                console.log("\n(Initializing db htManage table)\n");
                 var dataArray = [
                     ['分娩舍-溫溼度感測1', 'A', '24C', '55%'],
                     ['分娩舍-溫溼度感測2', 'B', '24C', '55%'],
@@ -87,17 +87,18 @@ module.exports = function (app, mongoose, conn, User, Workspace, EventA, EventB,
                     ['分娩舍-溫溼度感測4', 'D', '24C', '55%']
                 ];
                 dataArray.forEach(function (current) {
-                    console.log(current,"||||");
+                    console.log('Data: ',current);
                     var db = new htManage();
-                    console.log(db,"==========");
+                    console.log('DB: ',db);
 
                     db.name = current[0];
                     db.sensorID = current[1];
                     db.temperature = current[2];
                     db.humidity = current[3];
                     db.save();
+                    console.log(" ");
                 })
-                console.log("Please restart the server.")
+                console.log("Please restart the server...")
             }
         });
     }

@@ -365,7 +365,7 @@ function Define_Innormal_Time(v_date, video, audiopath){ //有跨夜
                 }
             }
         }
-    }else if(v_hr==00 & v_min<5){  //取前天時間
+    }else if(v_hr==0 & v_min<5){  //取前天時間
         var yesterday_date = Get_Date(v_date, -1)
         if(fs.existsSync(audiopath + '/' + yesterday_date + '/')){
             audiobuffer = Get_Files(audiopath + '/' + yesterday_date + '/')
